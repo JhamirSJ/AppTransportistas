@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".menu.MenuActivity">
+
+    <!-- Encabezado San Jorge -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clEncabezado"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
+        android:background="@color/red_sj"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="60dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/logo_sj_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvSanJorge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvSanJorge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="60dp"
+            android:text="SAN JORGE"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivLogo"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Botón(es) -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRgGuias"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="50dp"
+        android:backgroundTint="@color/red_sj"
+        android:text="REGISTRAR ENTREGA DE GUÍA"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        app:elevation="10dp"
+        app:layout_constraintBottom_toTopOf="@id/btnMisGuias"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clEncabezado" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnMisGuias"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="400dp"
+        android:backgroundTint="@color/red_sj"
+        android:text="MIS GUÍAS"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:cornerRadius="8dp"
+        app:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnRgGuias" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

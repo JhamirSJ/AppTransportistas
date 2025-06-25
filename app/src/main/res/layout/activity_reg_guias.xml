@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".registrarentregaguias.RegGuiasActivity">
+
+    <!-- Encabezado -->
+    <TextView
+        android:id="@+id/tvEncabezado"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/red_sj"
+        android:padding="20dp"
+        android:paddingStart="25dp"
+        android:text="Registrar entrega de guía"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tvFechaActual"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Fecha Actual -->
+    <TextView
+        android:id="@+id/tvFechaActual"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:paddingTop="5dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/btnSelecGuia"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvEncabezado"
+        tools:text="Fecha actual aquí" />
+
+    <!-- Botón seleccionar guía -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSelecGuia"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="16dp"
+        android:backgroundTint="@color/gray"
+        android:text="SELECCIONAR GUÍA"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:cornerRadius="6dp"
+        app:elevation="10dp"
+        app:layout_constraintBottom_toTopOf="@id/llInfoGuia"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvFechaActual" />
+
+    <!-- Información -->
+    <LinearLayout
+        android:id="@+id/llInfoGuia"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSelecGuia">
+
+        <!-- Información de guía -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Guía #"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvNroGSeleccionada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/borde_recuadro"
+            android:padding="8dp"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="Fecha"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvFechaGSeleccionada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/borde_recuadro"
+            android:padding="8dp"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="Código"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvCodGSeleccionada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/borde_recuadro"
+            android:padding="8dp"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="Nombre"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvNombreGSeleccionada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/borde_recuadro"
+            android:padding="8dp"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:text="Nro. Comprobante de venta"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tvNroComprobante"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/borde_recuadro"
+            android:padding="8dp"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <!-- Cobro -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:text="Importe x cobrar S/."
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvImporteXCobrar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/borde_recuadro"
+                android:padding="8dp"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <!-- Botón Productos -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVerProductos"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:backgroundTint="@color/gray"
+            android:text="Productos"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:cornerRadius="6dp">
+
+        </com.google.android.material.button.MaterialButton>
+
+        <!-- Botones finales -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Botón Cobrar -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCobrarGuia"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/red_sj"
+                android:text="COBRAR"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:cornerRadius="6dp">
+
+            </com.google.android.material.button.MaterialButton>
+
+            <!-- Botón Registrar -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRegistrarEntrega"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/red_sj"
+                android:text="REGISTRAR"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:cornerRadius="6dp">
+
+            </com.google.android.material.button.MaterialButton>
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
