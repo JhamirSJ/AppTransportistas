@@ -24,7 +24,7 @@
             android:name=".verproductos.VerProductosActivity"
             android:exported="false" />
         <activity
-            android:name=".seleccionarguia.SelecGuiasActivity"
+            android:name=".seleccionarguia.SelecGuiaActivity"
             android:exported="false" />
         <activity
             android:name=".misguias.MisGuiasActivity"

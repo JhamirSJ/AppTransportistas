@@ -4,19 +4,33 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.apptransportistas.R
 import com.example.apptransportistas.cobrarguias.CobrarGuiasActivity
-import com.example.apptransportistas.seleccionarguia.SelecGuiasActivity
+import com.example.apptransportistas.seleccionarguia.Guia
+import com.example.apptransportistas.seleccionarguia.SelecGuiaActivity
 import com.example.apptransportistas.verproductos.VerProductosActivity
 import com.google.android.material.button.MaterialButton
 import java.util.Date
 import java.util.Locale
 
 class RegGuiasActivity : AppCompatActivity() {
+
+    private val guiaLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val guia = result.data?.getSerializableExtra("guiaSeleccionada") as? Guia
+            guia?.let {
+                findViewById<TextView>(R.id.tvNroGSeleccionada).text = it.numero
+                findViewById<TextView>(R.id.tvFechaGSeleccionada).text = it.fecha
+                findViewById<TextView>(R.id.tvCodGSeleccionada).text = it.codigo
+                findViewById<TextView>(R.id.tvNombreGSeleccionada).text = it.nombre
+                findViewById<TextView>(R.id.tvNroComprobante).text = it.nroComprobante
+                findViewById<TextView>(R.id.tvImporteXCobrar).text = String.format("%.2f", it.importeXCobrar)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reg_guias)
@@ -29,7 +43,6 @@ class RegGuiasActivity : AppCompatActivity() {
         btnVerProductos.setOnClickListener { navigateToVerProductos() }
         btnCobrarGuia.setOnClickListener { navigateToCobrarGuia() }
 
-
         FechaActual()
     }
 
@@ -40,8 +53,8 @@ class RegGuiasActivity : AppCompatActivity() {
     }
 
     private fun navigateToSelecGuia() {
-        val intent = Intent(this, SelecGuiasActivity::class.java)
-        startActivity(intent)
+        val intent = Intent(this, SelecGuiaActivity::class.java)
+        guiaLauncher.launch(intent)
     }
 
     private fun navigateToVerProductos() {
