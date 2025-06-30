@@ -63,7 +63,11 @@ class RegGuiasActivity : AppCompatActivity() {
     }
 
     private fun navigateToCobrarGuia() {
+        val tvImporte = findViewById<TextView>(R.id.tvImporteXCobrar)
+        val importe = tvImporte.text.toString().toDoubleOrNull() ?: 0.0
+
         val intent = Intent(this, CobrarGuiasActivity::class.java)
+        intent.putExtra("importe_x_cobrar", importe)
         startActivity(intent)
     }
 
