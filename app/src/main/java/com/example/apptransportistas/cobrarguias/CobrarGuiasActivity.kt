@@ -1,5 +1,6 @@
 package com.example.apptransportistas.cobrarguias
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -8,7 +9,8 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.apptransportistas.R
-import com.example.apptransportistas.menu.MenuActivity
+import com.example.apptransportistas.data.local.DatabaseHelper
+import com.example.apptransportistas.registrarentregaguias.RegGuiasActivity
 import com.google.android.material.button.MaterialButton
 
 class CobrarGuiasActivity : AppCompatActivity() {
@@ -16,13 +18,16 @@ class CobrarGuiasActivity : AppCompatActivity() {
     private lateinit var tvTotalXCobrar: TextView
     private lateinit var etMontoCobrado: EditText
     private lateinit var tvPendienteXCobrar: TextView
+    private lateinit var dbHelper: DatabaseHelper
 
     private var importeXCobrar: Double = 0.0
+    private var guiaId: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cobrar_guias)
 
+        dbHelper = DatabaseHelper(this)
         tvTotalXCobrar = findViewById(R.id.tvTotalXCobrar)
         etMontoCobrado = findViewById(R.id.etMontoCobrado)
         tvPendienteXCobrar = findViewById(R.id.tvPendienteXCobrar)
@@ -30,6 +35,8 @@ class CobrarGuiasActivity : AppCompatActivity() {
         val btnCancelar = findViewById<MaterialButton>(R.id.btnCancelar)
 
         importeXCobrar = intent.getDoubleExtra("importe_x_cobrar", 0.0)
+        guiaId = intent.getLongExtra("guia_id", -1)
+
         tvTotalXCobrar.text = String.format("%.2f", importeXCobrar)
 
         etMontoCobrado.addTextChangedListener(object : TextWatcher {
@@ -43,16 +50,27 @@ class CobrarGuiasActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        btnCerrarDespacho.setOnClickListener { navigateToMenu() }
+        btnCerrarDespacho.setOnClickListener { registrarDespachoYVolver() }
 
-        btnCancelar.setOnClickListener {
-            finish()
-        }
+        btnCancelar.setOnClickListener { finish() }
     }
 
-    private fun navigateToMenu() {
-        val intent = Intent(this, MenuActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    private fun registrarDespachoYVolver() {
+        val montoCobrado = etMontoCobrado.text.toString().toDoubleOrNull() ?: 0.0
+
+        if (guiaId != -1L) {
+            val db = dbHelper.writableDatabase
+            val values = ContentValues().apply {
+                put("monto_cobrado", montoCobrado)
+                put("entregada", 1)
+            }
+            db.update("guia", values, "id = ?", arrayOf(guiaId.toString()))
+            db.close()
+        }
+
+        val intent = Intent(this, RegGuiasActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         startActivity(intent)
+        finish()
     }
 }
