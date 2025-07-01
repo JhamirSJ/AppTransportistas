@@ -1,4 +1,4 @@
-package com.example.apptransportistas.seleccionarguia
+package com.example.apptransportistas.guias.seleccionarguia
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apptransportistas.R
 import com.example.apptransportistas.data.local.DatabaseHelper
+import com.example.apptransportistas.guias.Guia
+import com.example.apptransportistas.guias.GuiaAdapter
 
 class SelecGuiaActivity : AppCompatActivity() {
 
@@ -47,8 +49,9 @@ class SelecGuiaActivity : AppCompatActivity() {
             val nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre_cliente"))
             val nroComprobante = cursor.getString(cursor.getColumnIndexOrThrow("nro_comprobante"))
             val importe = cursor.getDouble(cursor.getColumnIndexOrThrow("importe_x_cobrar"))
+            val entregada = cursor.getInt(cursor.getColumnIndexOrThrow("entregada"))
 
-            lista.add(Guia(id, numero, fecha, codigo, nombre, nroComprobante, importe))
+            lista.add(Guia(id, numero, fecha, codigo, nombre, nroComprobante, importe, entregada))
         }
 
         cursor.close()

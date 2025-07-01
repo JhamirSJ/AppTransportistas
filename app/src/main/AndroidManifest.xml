@@ -15,7 +15,7 @@
         android:theme="@style/Theme.AppTransportistas"
         tools:targetApi="31">
         <activity
-            android:name=".gRPCActivity"
+            android:name=".sincronizardata.SincronizarDataActivity"
             android:exported="false" />
         <activity
             android:name=".cobrarguias.CobrarGuiasActivity"
@@ -24,10 +24,10 @@
             android:name=".verproductos.VerProductosActivity"
             android:exported="false" />
         <activity
-            android:name=".seleccionarguia.SelecGuiaActivity"
+            android:name=".guias.seleccionarguia.SelecGuiaActivity"
             android:exported="false" />
         <activity
-            android:name=".misguias.MisGuiasActivity"
+            android:name=".guias.misguias.MisGuiasActivity"
             android:exported="false" />
         <activity
             android:name=".registrarentregaguias.RegGuiasActivity"

@@ -4,9 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.apptransportistas.R
-import com.example.apptransportistas.gRPCActivity
-import com.example.apptransportistas.misguias.MisGuiasActivity
+import com.example.apptransportistas.guias.misguias.MisGuiasActivity
 import com.example.apptransportistas.registrarentregaguias.RegGuiasActivity
+import com.example.apptransportistas.sincronizardata.SincronizarDataActivity
 import com.google.android.material.button.MaterialButton
 
 class MenuActivity : AppCompatActivity() {
@@ -16,11 +16,11 @@ class MenuActivity : AppCompatActivity() {
 
         val btnMisGuias = findViewById<MaterialButton>(R.id.btnMisGuias)
         val btnRegGuias = findViewById<MaterialButton>(R.id.btnRgGuias)
-        val btn_grpc = findViewById<MaterialButton>(R.id.btn_grpc)
+        val btnSyncData = findViewById<MaterialButton>(R.id.btnSyncData)
 
         btnMisGuias.setOnClickListener { navigateToMisGuias() }
         btnRegGuias.setOnClickListener { navigateToRgGuias() }
-        btn_grpc.setOnClickListener { navigateToPruebagrpc() }
+        btnSyncData.setOnClickListener { navigateToSincronizarData() }
     }
 
     private fun navigateToMisGuias() {
@@ -33,8 +33,8 @@ class MenuActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun navigateToPruebagrpc() {
-        val intent = Intent(this, gRPCActivity::class.java)
+    private fun navigateToSincronizarData() {
+        val intent = Intent(this, SincronizarDataActivity::class.java)
         startActivity(intent)
     }
 }

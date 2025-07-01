@@ -1,4 +1,4 @@
-package com.example.apptransportistas.seleccionarguia
+package com.example.apptransportistas.guias
 
 import java.io.Serializable
 
@@ -9,5 +9,6 @@ data class Guia(
     val codigo: String,
     val nombre: String,
     val nroComprobante: String,
-    val importeXCobrar: Double
+    val importeXCobrar: Double,
+    val entregada: Int = 0
 ) : Serializable

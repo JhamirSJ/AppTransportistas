@@ -1,4 +1,4 @@
-package com.example.apptransportistas.seleccionarguia
+package com.example.apptransportistas.guias
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

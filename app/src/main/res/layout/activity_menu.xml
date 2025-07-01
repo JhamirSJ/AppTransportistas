@@ -76,13 +76,13 @@
         android:textStyle="bold"
         app:cornerRadius="8dp"
         app:elevation="10dp"
-        app:layout_constraintBottom_toTopOf="@id/btn_grpc"
+        app:layout_constraintBottom_toTopOf="@id/btnSyncData"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnRgGuias" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_grpc"
+        android:id="@+id/btnSyncData"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="50dp"

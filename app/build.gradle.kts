@@ -53,13 +53,18 @@ protobuf {
     generateProtoTasks {
         all().configureEach {
             plugins {
-                create("grpc")
+                create("grpc") {
+                    option("lite")
+                }
             }
             builtins {
-                create("java")
+                create("java") {
+                    option("lite")
+                }
             }
         }
     }
+
 }
 
 dependencies {
@@ -73,7 +78,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation("io.grpc:grpc-okhttp:1.63.0")
-    implementation("io.grpc:grpc-protobuf:1.63.0")
+    implementation("io.grpc:grpc-protobuf-lite:1.63.0")
     implementation("io.grpc:grpc-stub:1.63.0")
     implementation("javax.annotation:javax.annotation-api:1.3.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

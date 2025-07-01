@@ -1,19 +1,38 @@
 syntax = "proto3";
 
-package saludar;
+package despacho;
 
-option go_package = "./saludarpb";
-option java_package = "saludarpb";
+option go_package = "./despachopb";
+option java_package = "despachopb";
 option java_multiple_files = true;
 
-service SaludarService {
-  rpc SayHello (HelloRequest) returns (HelloResponse) {}
+service DespachoService {
+  rpc EnviarEntregas (stream Guia) returns (EntregaResponse);
+  rpc ObtenerDespachos (DespachoRequest) returns (stream Guia);
 }
 
-message HelloRequest {
-  string name = 1;
+message DespachoRequest {
+  int32 transportista_id = 1;
 }
 
-message HelloResponse {
-  string message = 1;
+message EntregaResponse {
+  string mensaje = 1;
+  int32 total_registradas = 2;
+}
+
+message Guia {
+  string numero = 1;
+  string fecha = 2; // formato: "2025-07-01"
+  string codigo_cliente = 3;
+  string nombre_cliente = 4;
+  string nro_comprobante = 5;
+  double importe_x_cobrar = 6;
+  double monto_cobrado = 7;
+  bool entregada = 8;
+  repeated Producto productos = 9;
+}
+
+message Producto {
+  string nombre = 1;
+  int32 cantidad = 2;
 }

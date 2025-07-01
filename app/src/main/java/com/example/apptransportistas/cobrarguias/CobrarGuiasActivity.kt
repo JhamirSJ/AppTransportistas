@@ -50,19 +50,18 @@ class CobrarGuiasActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        btnCerrarDespacho.setOnClickListener { registrarDespachoYVolver() }
+        btnCerrarDespacho.setOnClickListener { Cobrar() }
 
         btnCancelar.setOnClickListener { finish() }
     }
 
-    private fun registrarDespachoYVolver() {
+    private fun Cobrar() {
         val montoCobrado = etMontoCobrado.text.toString().toDoubleOrNull() ?: 0.0
 
         if (guiaId != -1L) {
             val db = dbHelper.writableDatabase
             val values = ContentValues().apply {
                 put("monto_cobrado", montoCobrado)
-                put("entregada", 1)
             }
             db.update("guia", values, "id = ?", arrayOf(guiaId.toString()))
             db.close()
@@ -71,6 +70,7 @@ class CobrarGuiasActivity : AppCompatActivity() {
         val intent = Intent(this, RegGuiasActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         startActivity(intent)
+        setResult(RESULT_OK)
         finish()
     }
 }
