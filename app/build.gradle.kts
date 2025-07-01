@@ -1,12 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.protobuf") version "0.9.4"
+    id("com.google.protobuf") version "0.9.5"
 }
 
 android {
     namespace = "com.example.apptransportistas"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.apptransportistas"
@@ -77,9 +77,9 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation("io.grpc:grpc-okhttp:1.63.0")
-    implementation("io.grpc:grpc-protobuf-lite:1.63.0")
-    implementation("io.grpc:grpc-stub:1.63.0")
+    implementation("io.grpc:grpc-okhttp:1.73.0")
+    implementation("io.grpc:grpc-protobuf-lite:1.73.0")
+    implementation("io.grpc:grpc-stub:1.73.0")
     implementation("javax.annotation:javax.annotation-api:1.3.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
 }
