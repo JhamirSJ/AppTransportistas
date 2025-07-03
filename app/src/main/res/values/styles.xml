@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Estilo para botones del menú principal -->
+    <style name="BotonMenuPrincipal" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginHorizontal">40dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="backgroundTint">@color/red_sj</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="elevation">10dp</item>
+    </style>
+
+    <!-- Estilo para Fecha Actual -->
+    <style name="TextoFechaActual">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- Estilo botón gris general -->
+    <style name="BotonSecundarioGris" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">55dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="backgroundTint">@color/gray</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="elevation">8dp</item>
+    </style>
+
+    <!-- Estilo botón rojo principal -->
+    <style name="BotonPrincipalRojo" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="backgroundTint">@color/red_sj</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="elevation">8dp</item>
+    </style>
+
+    <!-- Título principal de pantalla -->
+    <style name="TituloPantalla">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">@color/light_black</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Estilo para el EditText de búsqueda -->
+    <style name="CampoBusqueda">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:drawable/editbox_background</item>
+        <item name="android:drawableEnd">@android:drawable/ic_menu_search</item>
+        <item name="android:inputType">text</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/gray</item>
+    </style>
+
+    <!-- Estilo para el RecyclerView -->
+    <style name="ListaRecycler">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <!-- Etiqueta de campo -->
+    <style name="EtiquetaCampo">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!-- Recuadro -->
+    <style name="EstiloRecuadro">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/borde_recuadro</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColorHint">@color/gray</item>
+    </style>
+
+</resources>

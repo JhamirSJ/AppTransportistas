@@ -10,13 +10,8 @@
     <!-- Título -->
     <TextView
         android:id="@+id/tvTitulo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
+        style="@style/TituloPantalla"
         android:text="MIS GUÍAS"
-        android:textColor="@color/light_black"
-        android:textSize="22sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/etBuscarGuia"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,16 +20,8 @@
     <!-- Campo de búsqueda -->
     <EditText
         android:id="@+id/etBuscarGuia"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"
-        android:drawableEnd="@android:drawable/ic_menu_search"
+        style="@style/CampoBusqueda"
         android:hint=" Buscar guía"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:padding="10dp"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray"
         app:layout_constraintBottom_toTopOf="@id/tvFechaActual"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,25 +30,17 @@
     <!-- Fecha Actual -->
     <TextView
         android:id="@+id/tvFechaActual"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:gravity="center"
-        android:paddingTop="5dp"
-        android:textColor="@color/black"
-        android:textSize="20sp"
+        style="@style/TextoFechaActual"
         app:layout_constraintBottom_toTopOf="@id/rvGuias"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etBuscarGuia"
-        tools:text="Fecha actual aquí" />
+        tools:text="HOY: DD/MM/AAAA" />
 
     <!-- Lista de guías -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvGuias"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:padding="8dp"
+        style="@style/ListaRecycler"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".registrardeposito.RegDepositoActivity">
+
+    <!-- Encabezado fijo -->
+    <TextView
+        android:id="@+id/tvEncabezado"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/red_sj"
+        android:padding="20dp"
+        android:paddingStart="25dp"
+        android:text="Registrar depósito"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Fecha fija -->
+    <TextView
+        android:id="@+id/tvFechaActual"
+        style="@style/TextoFechaActual"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toBottomOf="@id/tvEncabezado"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="HOY: DD/MM/AAAA" />
+
+    <!-- ScrollView con el resto del contenido -->
+    <ScrollView
+        android:id="@+id/svFormulario"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/tvFechaActual"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:id="@+id/llFormularioDeposito"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="16dp">
+
+            <!-- Nro de Operación -->
+            <TextView
+                style="@style/EtiquetaCampo"
+                android:text="Nro. de operación" />
+
+            <EditText
+                android:id="@+id/etNroOperacion"
+                style="@style/EstiloRecuadro"
+                android:hint="Ingrese nro. operación"
+                android:inputType="text" />
+
+            <!-- Fecha -->
+            <TextView
+                style="@style/EtiquetaCampo"
+                android:layout_marginTop="5dp"
+                android:text="Fecha" />
+
+            <EditText
+                android:id="@+id/etFecha"
+                style="@style/EstiloRecuadro"
+                android:clickable="true"
+                android:focusable="false"
+                android:hint="DD/MM/AAAA" />
+
+            <!-- Banco -->
+            <TextView
+                style="@style/EtiquetaCampo"
+                android:layout_marginTop="5dp"
+                android:text="Banco" />
+
+            <EditText
+                android:id="@+id/etBanco"
+                style="@style/EstiloRecuadro"
+                android:hint="Nombre del banco" />
+
+            <!-- Monto depositado -->
+            <TextView
+                style="@style/EtiquetaCampo"
+                android:layout_marginTop="5dp"
+                android:text="Monto depositado S/." />
+
+            <EditText
+                android:id="@+id/etMontoDepositado"
+                style="@style/EstiloRecuadro"
+                android:hint="0.00"
+                android:inputType="numberDecimal" />
+
+            <!-- Pendiente a depositar -->
+            <TextView
+                style="@style/EtiquetaCampo"
+                android:layout_marginTop="5dp"
+                android:text="Pendiente a depositar S/." />
+
+            <TextView
+                android:id="@+id/tvPendienteDeposito"
+                style="@style/EstiloRecuadro"
+                android:text="0.00" />
+
+            <!-- Imagen del voucher -->
+            <TextView
+                style="@style/EtiquetaCampo"
+                android:layout_marginTop="5dp"
+                android:text="Imagen del voucher" />
+
+            <ImageView
+                android:id="@+id/ivVoucher"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/borde_recuadro"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_imagen_placeholder" />
+
+            <!-- Botón seleccionar imagen -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSeleccionarImagen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/gray"
+                android:text="Seleccionar imagen"
+                android:textColor="@color/white"
+                app:cornerRadius="8dp" />
+
+            <!-- Botón registrar depósito -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRegistrarDeposito"
+                style="@style/BotonPrincipalRojo"
+                android:text="REGISTRAR DEPÓSITO" />
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

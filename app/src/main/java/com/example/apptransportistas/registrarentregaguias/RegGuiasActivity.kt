@@ -58,12 +58,12 @@ class RegGuiasActivity : AppCompatActivity() {
 
         val btnSelecGuia = findViewById<MaterialButton>(R.id.btnSelecGuia)
         val btnVerProductos = findViewById<MaterialButton>(R.id.btnVerProductos)
-        val btnCobrarGuia = findViewById<MaterialButton>(R.id.btnCobrarGuia)
+        //val btnCobrarGuia = findViewById<MaterialButton>(R.id.btnCobrarGuia)
         val btnRegistrarEntrega = findViewById<MaterialButton>(R.id.btnRegistrarEntrega)
 
         btnSelecGuia.setOnClickListener { navigateToSelecGuia() }
         btnVerProductos.setOnClickListener { navigateToVerProductos() }
-        btnCobrarGuia.setOnClickListener { navigateToCobrarGuia() }
+        //btnCobrarGuia.setOnClickListener { navigateToCobrarGuia() }
         btnRegistrarEntrega.setOnClickListener {
             if (guiaId != -1L) {
                 val db = dbHelper.writableDatabase
@@ -85,7 +85,7 @@ class RegGuiasActivity : AppCompatActivity() {
     private fun FechaActual() {
         val tvFecha = findViewById<TextView>(R.id.tvFechaActual)
         val fechaActual = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-        tvFecha.text = "FECHA (ACTUAL): $fechaActual"
+        tvFecha.text = "HOY: $fechaActual"
     }
 
     private fun navigateToSelecGuia() {

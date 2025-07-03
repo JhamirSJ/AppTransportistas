@@ -11,13 +11,8 @@
     <!-- Título -->
     <TextView
         android:id="@+id/tvTitulo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
+        style="@style/TituloPantalla"
         android:text="SELECCIONAR GUÍA"
-        android:textColor="@color/light_black"
-        android:textSize="22sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/etBuscar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,27 +21,17 @@
     <!-- Campo de búsqueda -->
     <EditText
         android:id="@+id/etBuscar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"
-        android:drawableEnd="@android:drawable/ic_menu_search"
+        style="@style/CampoBusqueda"
         android:hint=" Buscar guía"
-        android:inputType="text"
-        android:minHeight="48dp"
-        android:padding="10dp"
-        android:textColor="@color/black"
-        android:textColorHint="@color/gray"
+        app:layout_constraintBottom_toTopOf="@id/rvListaGuias"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitulo"
-        app:layout_constraintBottom_toTopOf="@id/rvListaGuias"/>
+        app:layout_constraintTop_toBottomOf="@id/tvTitulo" />
 
     <!-- Lista de guías -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvListaGuias"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:padding="8dp"
+        style="@style/ListaRecycler"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

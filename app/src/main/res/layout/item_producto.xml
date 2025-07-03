@@ -3,24 +3,34 @@
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:elevation="4dp"
-    android:padding="12dp">
+    android:orientation="vertical">
 
+    <!-- Nombre del producto -->
     <TextView
         android:id="@+id/tvNombreProducto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:textColor="#383838"
         android:textSize="16sp"
         android:textStyle="bold"
         tool:text="Galleta Naranja 150g" />
 
+    <!-- Cantidad del producto -->
     <TextView
         android:id="@+id/tvCantidadProducto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#6B6B6B"
         tool:text="4" />
+
+    <!-- Separador visual -->
+    <View
+        android:id="@+id/vSeparador"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="100dp"
+        android:background="@color/light_gray" />
 
 </LinearLayout>

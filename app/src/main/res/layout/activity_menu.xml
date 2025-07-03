@@ -7,7 +7,7 @@
     android:background="@color/white"
     tools:context=".menu.MenuActivity">
 
-    <!-- Encabezado San Jorge -->
+    <!-- Encabezado SAN JORGE -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clEncabezado"
         android:layout_width="0dp"
@@ -45,58 +45,46 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Botón(es) -->
+    <!-- Botón REGISTRAR ENTREGA DE GUÍA -->
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnRgGuias"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="50dp"
-        android:backgroundTint="@color/red_sj"
+        android:id="@+id/btnRegGuias"
+        style="@style/BotonMenuPrincipal"
+        android:layout_marginTop="80dp"
         android:text="REGISTRAR ENTREGA DE GUÍA"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:cornerRadius="8dp"
-        app:elevation="10dp"
         app:layout_constraintBottom_toTopOf="@id/btnMisGuias"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/clEncabezado" />
 
+    <!-- Botón MIS GUÍAS -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnMisGuias"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:backgroundTint="@color/red_sj"
+        style="@style/BotonMenuPrincipal"
         android:text="MIS GUÍAS"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:cornerRadius="8dp"
-        app:elevation="10dp"
         app:layout_constraintBottom_toTopOf="@id/btnSyncData"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnRgGuias" />
+        app:layout_constraintTop_toBottomOf="@id/btnRegGuias" />
 
+    <!-- Botón SINCRONIZAR APP -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSyncData"
-        android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
+        style="@style/BotonMenuPrincipal"
+        android:text="SINCRONIZAR APP"
+        app:layout_constraintBottom_toTopOf="@id/btnRegDeposito"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnMisGuias" />
+
+    <!-- Botón REGISTRAR DEPÓSITO -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRegDeposito"
+        style="@style/BotonMenuPrincipal"
         android:layout_marginBottom="200dp"
-        android:backgroundTint="@color/red_sj"
-        android:text="PRUEBA GRPC"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:cornerRadius="8dp"
-        app:elevation="10dp"
+        android:text="REGISTRAR DEPÓSITO"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnRgGuias" />
+        app:layout_constraintTop_toBottomOf="@id/btnSyncData" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
