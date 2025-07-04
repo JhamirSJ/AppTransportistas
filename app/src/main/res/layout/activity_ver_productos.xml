@@ -23,14 +23,14 @@
         android:layout_width="0dp"
         android:layout_height="2dp"
         android:background="@color/light_gray"
-        app:layout_constraintBottom_toTopOf="@id/rvProductos"
+        app:layout_constraintBottom_toTopOf="@id/rvListaProductos"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTitulo" />
 
     <!-- Lista Productos-->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvProductos"
+        android:id="@+id/rvListaProductos"
         style="@style/ListaRecycler"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

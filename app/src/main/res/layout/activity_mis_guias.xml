@@ -7,11 +7,11 @@
     android:background="@color/white"
     tools:context=".guias.misguias.MisGuiasActivity">
 
-    <!-- Título -->
+    <!-- Encabezado fijo -->
     <TextView
-        android:id="@+id/tvTitulo"
-        style="@style/TituloPantalla"
-        android:text="MIS GUÍAS"
+        android:id="@+id/tvEncabezado"
+        style="@style/EncabezadoPantalla"
+        android:text="Mis guías"
         app:layout_constraintBottom_toTopOf="@id/etBuscarGuia"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +25,7 @@
         app:layout_constraintBottom_toTopOf="@id/tvFechaActual"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitulo" />
+        app:layout_constraintTop_toBottomOf="@id/tvEncabezado" />
 
     <!-- Fecha Actual -->
     <TextView

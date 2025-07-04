@@ -18,7 +18,7 @@ class SelecGuiaActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_selec_guias)
+        setContentView(R.layout.activity_selec_guia)
 
         dbHelper = DatabaseHelper(this)
         rvListaGuias = findViewById(R.id.rvListaGuias)

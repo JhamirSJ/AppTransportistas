@@ -7,18 +7,11 @@
     android:background="@color/white"
     tools:context=".registrarentregaguias.RegGuiasActivity">
 
-    <!-- Encabezado SAN JORGE -->
+    <!-- Encabezado -->
     <TextView
         android:id="@+id/tvEncabezado"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/red_sj"
-        android:padding="20dp"
-        android:paddingStart="25dp"
+        style="@style/EncabezadoPantalla"
         android:text="Registrar entrega de guía"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/tvFechaActual"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,8 +50,8 @@
             android:text="Guía #" />
 
         <TextView
-            style="@style/EstiloRecuadro"
-            android:id="@+id/tvNroGSeleccionada" />
+            android:id="@+id/tvNroGuiaSelec"
+            style="@style/EstiloRecuadro" />
 
         <!-- Fecha -->
         <TextView
@@ -67,8 +60,8 @@
             android:text="Fecha" />
 
         <TextView
-            style="@style/EstiloRecuadro"
-            android:id="@+id/tvFechaGSeleccionada" />
+            android:id="@+id/tvFechaGuiaSelec"
+            style="@style/EstiloRecuadro" />
 
         <!-- Código -->
         <TextView
@@ -77,8 +70,8 @@
             android:text="Código" />
 
         <TextView
-            style="@style/EstiloRecuadro"
-            android:id="@+id/tvCodGSeleccionada" />
+            android:id="@+id/tvCodGuiaSelec"
+            style="@style/EstiloRecuadro" />
 
         <!-- Nombre -->
         <TextView
@@ -87,8 +80,8 @@
             android:text="Nombre" />
 
         <TextView
-            style="@style/EstiloRecuadro"
-            android:id="@+id/tvNombreGSeleccionada" />
+            android:id="@+id/tvNombreGuiaSelec"
+            style="@style/EstiloRecuadro" />
 
         <!-- Nro Comprobante -->
         <TextView
@@ -97,8 +90,8 @@
             android:text="Nro. Comprobante de venta" />
 
         <TextView
-            style="@style/EstiloRecuadro"
-            android:id="@+id/tvNroComprobante" />
+            android:id="@+id/tvNroComprobante"
+            style="@style/EstiloRecuadro" />
 
         <!-- Importe x cobrar -->
         <LinearLayout
@@ -109,13 +102,11 @@
 
             <TextView
                 style="@style/EtiquetaCampo"
-                android:text="Importe x cobrar S/." />
+                android:text="Importe x cobrar S/. " />
 
             <TextView
-                style="@style/EstiloRecuadro"
                 android:id="@+id/tvImporteXCobrar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/EstiloRecuadro"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -128,7 +119,7 @@
 
         <!-- Botón REGISTRAR -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRegistrarEntrega"
+            android:id="@+id/btnRegEntrega"
             style="@style/BotonPrincipalRojo"
             android:text="REGISTRAR" />
     </LinearLayout>

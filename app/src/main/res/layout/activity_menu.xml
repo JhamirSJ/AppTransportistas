@@ -7,7 +7,7 @@
     android:background="@color/white"
     tools:context=".menu.MenuActivity">
 
-    <!-- Encabezado SAN JORGE -->
+    <!-- Encabezado -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clEncabezado"
         android:layout_width="0dp"

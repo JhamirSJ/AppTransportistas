@@ -21,7 +21,7 @@ class VerProductosActivity : AppCompatActivity() {
         setContentView(R.layout.activity_ver_productos)
 
         dbHelper = DatabaseHelper(this)
-        recyclerView = findViewById(R.id.rvProductos)
+        recyclerView = findViewById(R.id.rvListaProductos)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val guiaId = intent.getLongExtra("guia_id", -1)
@@ -36,7 +36,10 @@ class VerProductosActivity : AppCompatActivity() {
     private fun obtenerProductosDeGuia(guiaId: Long): List<Producto> {
         val lista = mutableListOf<Producto>()
         val db = dbHelper.readableDatabase
-        val cursor = db.rawQuery("SELECT id, nombre, cantidad FROM producto WHERE id_guia = ?", arrayOf(guiaId.toString()))
+        val cursor = db.rawQuery(
+            "SELECT id, nombre, cantidad FROM producto WHERE id_guia = ?",
+            arrayOf(guiaId.toString())
+        )
         while (cursor.moveToNext()) {
             val id = cursor.getLong(0)
             val nombre = cursor.getString(1)
