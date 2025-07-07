@@ -119,9 +119,9 @@
 
         <!-- Botón REGISTRAR -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnRegEntrega"
+            android:id="@+id/btnContinuarReg"
             style="@style/BotonPrincipalRojo"
-            android:text="REGISTRAR" />
+            android:text="CONTINUAR CON REGISTRO" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

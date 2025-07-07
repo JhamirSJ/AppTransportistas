@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".registrarentregaguias.adjuntarpruebaentrega.AdjuntarPruebaActivity">
+
+    <!-- Título -->
+    <TextView
+        android:id="@+id/tvTitulo"
+        style="@style/TituloPantalla"
+        android:text="ADJUNTAR PRUEBA"
+        app:layout_constraintBottom_toTopOf="@id/svContenido"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- ScrollView para contenido -->
+    <ScrollView
+        android:id="@+id/svContenido"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitulo">
+
+        <LinearLayout
+            android:id="@+id/llContenido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp">
+
+            <!-- Sección Firma -->
+            <TextView
+                style="@style/EtiquetaCampo"
+                android:text="Firma" />
+
+            <com.github.gcacace.signaturepad.views.SignaturePad
+                android:id="@+id/signaturePad"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/borde_recuadro" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBorrarFirma"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/gray"
+                android:text="Borrar firma"
+                android:textColor="@color/white"
+                app:cornerRadius="8dp" />
+
+            <!-- Sección Imagen -->
+            <TextView
+                style="@style/EtiquetaCampo"
+                android:layout_marginTop="16dp"
+                android:text="Adjuntar imagen" />
+
+            <ImageView
+                android:id="@+id/ivFotoComprobante"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/borde_recuadro"
+                android:contentDescription="Vista previa de la imagen"
+                android:scaleType="centerCrop" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSeleccionarImagen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/gray"
+                android:text="Seleccionar imagen"
+                android:textColor="@color/white"
+                app:cornerRadius="8dp" />
+
+            <!-- Botón continuar -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRegEntrega"
+                style="@style/BotonPrincipalRojo"
+                android:layout_marginTop="16dp"
+                android:text="REGISTRAR" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

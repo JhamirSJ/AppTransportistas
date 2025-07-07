@@ -61,30 +61,30 @@
         android:id="@+id/btnMisGuias"
         style="@style/BotonMenuPrincipal"
         android:text="MIS GUÍAS"
-        app:layout_constraintBottom_toTopOf="@id/btnSyncData"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnRegGuias" />
-
-    <!-- Botón SINCRONIZAR APP -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSyncData"
-        style="@style/BotonMenuPrincipal"
-        android:text="SINCRONIZAR APP"
         app:layout_constraintBottom_toTopOf="@id/btnRegDeposito"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnMisGuias" />
+        app:layout_constraintTop_toBottomOf="@id/btnRegGuias" />
 
     <!-- Botón REGISTRAR DEPÓSITO -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegDeposito"
         style="@style/BotonMenuPrincipal"
-        android:layout_marginBottom="200dp"
         android:text="REGISTRAR DEPÓSITO"
+        app:layout_constraintBottom_toTopOf="@id/btnSyncData"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnMisGuias" />
+
+    <!-- Botón SINCRONIZAR APP -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSyncData"
+        style="@style/BotonMenuPrincipal"
+        android:layout_marginBottom="200dp"
+        android:text="SINCRONIZAR APP"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnSyncData" />
+        app:layout_constraintTop_toBottomOf="@id/btnRegDeposito" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

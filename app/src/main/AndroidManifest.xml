@@ -15,6 +15,9 @@
         android:theme="@style/Theme.AppTransportistas"
         tools:targetApi="31">
         <activity
+            android:name=".registrarentregaguias.adjuntarpruebaentrega.AdjuntarPruebaActivity"
+            android:exported="false" />
+        <activity
             android:name=".registrardeposito.RegDepositoActivity"
             android:exported="false" />
         <activity

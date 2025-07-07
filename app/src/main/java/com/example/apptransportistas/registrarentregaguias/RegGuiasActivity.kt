@@ -1,19 +1,17 @@
 package com.example.apptransportistas.registrarentregaguias
 
-import android.content.ContentValues
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.os.Bundle
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.apptransportistas.R
 import com.example.apptransportistas.data.local.DatabaseHelper
-import com.example.apptransportistas.menu.MenuActivity
 import com.example.apptransportistas.guias.Guia
 import com.example.apptransportistas.guias.seleccionarguia.SelecGuiaActivity
+import com.example.apptransportistas.registrarentregaguias.adjuntarpruebaentrega.AdjuntarPruebaActivity
 import com.example.apptransportistas.verproductos.VerProductosActivity
 import com.google.android.material.button.MaterialButton
 import java.util.Date
@@ -23,8 +21,6 @@ class RegGuiasActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: DatabaseHelper
     private var guiaSeleccionada: Guia? = null
-
-    private var guiaId: Long = -1
 
     private val guiaLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -38,7 +34,6 @@ class RegGuiasActivity : AppCompatActivity() {
 
                 guia?.let {
                     guiaSeleccionada = it
-                    guiaId = it.id
                     findViewById<TextView>(R.id.tvNroGuiaSelec).text = it.numero
                     findViewById<TextView>(R.id.tvFechaGuiaSelec).text = it.fecha
                     findViewById<TextView>(R.id.tvCodGuiaSelec).text = it.codigo
@@ -54,35 +49,23 @@ class RegGuiasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reg_guias)
+        FechaActual()
 
         val btnSelecGuia = findViewById<MaterialButton>(R.id.btnSelecGuia)
         val btnVerProductos = findViewById<MaterialButton>(R.id.btnVerProductos)
-        val btnRegEntrega = findViewById<MaterialButton>(R.id.btnRegEntrega)
+        val btnContinuarReg = findViewById<MaterialButton>(R.id.btnContinuarReg)
 
         btnSelecGuia.setOnClickListener { navigateToSelecGuia() }
         btnVerProductos.setOnClickListener { navigateToVerProductos() }
-        btnRegEntrega.setOnClickListener {
-            if (guiaId != -1L) {
-                val db = dbHelper.writableDatabase
-                val values = ContentValues().apply {
-                    put("entregada", 1)
-                }
-                db.update("guia", values, "id = ?", arrayOf(guiaId.toString()))
-                db.close()
-            }
-            Toast.makeText(this, "✅ Guía entregada correctamente", Toast.LENGTH_SHORT).show()
-            navigatetoMenu()
-        }
+        btnContinuarReg.setOnClickListener { navigateToAdjuntarPrueba() }
 
         dbHelper = DatabaseHelper(this)
-
-        FechaActual()
     }
 
     private fun FechaActual() {
         val tvFecha = findViewById<TextView>(R.id.tvFechaActual)
         val fechaActual = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-        tvFecha.text = "HOY: $fechaActual"
+        tvFecha.text = "Hoy: $fechaActual"
     }
 
     private fun navigateToSelecGuia() {
@@ -97,8 +80,10 @@ class RegGuiasActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun navigatetoMenu() {
-        val intent = Intent(this, MenuActivity::class.java)
+    private fun navigateToAdjuntarPrueba() {
+        val guiaId = guiaSeleccionada?.id ?: return
+        val intent = Intent(this, AdjuntarPruebaActivity::class.java)
+        intent.putExtra("guiaId", guiaId)
         startActivity(intent)
     }
 }

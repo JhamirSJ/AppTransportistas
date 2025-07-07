@@ -81,5 +81,6 @@ dependencies {
     implementation("io.grpc:grpc-protobuf-lite:1.73.0")
     implementation("io.grpc:grpc-stub:1.73.0")
     implementation("javax.annotation:javax.annotation-api:1.3.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+    //implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+    implementation("com.github.gcacace:signature-pad:1.3.1")
 }

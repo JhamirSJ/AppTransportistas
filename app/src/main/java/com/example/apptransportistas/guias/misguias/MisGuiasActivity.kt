@@ -1,6 +1,8 @@
 package com.example.apptransportistas.guias.misguias
 
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +10,8 @@ import com.example.apptransportistas.R
 import com.example.apptransportistas.data.local.DatabaseHelper
 import com.example.apptransportistas.guias.Guia
 import com.example.apptransportistas.guias.GuiaAdapter
+import java.util.Date
+import java.util.Locale
 
 class MisGuiasActivity : AppCompatActivity() {
 
@@ -18,6 +22,7 @@ class MisGuiasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mis_guias)
+        FechaActual()
 
         dbHelper = DatabaseHelper(this)
         rvListaGuias = findViewById(R.id.rvGuias)
@@ -27,6 +32,12 @@ class MisGuiasActivity : AppCompatActivity() {
         val adapter = GuiaAdapter(listaGuias) {}
         rvListaGuias.layoutManager = LinearLayoutManager(this)
         rvListaGuias.adapter = adapter
+    }
+
+    private fun FechaActual() {
+        val tvFecha = findViewById<TextView>(R.id.tvFechaActual)
+        val fechaActual = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+        tvFecha.text = "Hoy: $fechaActual"
     }
 
     private fun obtenerGuiasDB(): List<Guia> {

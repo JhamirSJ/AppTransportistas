@@ -63,7 +63,7 @@
                 android:id="@+id/etNroOperacion"
                 style="@style/EstiloRecuadro"
                 android:hint="Ingrese nro. operación"
-                android:inputType="text" />
+                android:inputType="number" />
 
             <!-- Fecha -->
             <TextView
@@ -87,13 +87,13 @@
             <AutoCompleteTextView
                 android:id="@+id/etBancoDeposito"
                 style="@style/EstiloRecuadro"
-                android:hint="Seleccione el banco"
-                android:inputType="none"
-                android:focusable="true"
                 android:clickable="true"
+                android:dropDownAnchor="@id/etBancoDeposito"
                 android:dropDownHeight="wrap_content"
                 android:dropDownVerticalOffset="4dp"
-                android:dropDownAnchor="@id/etBancoDeposito" />
+                android:focusable="true"
+                android:hint="Seleccione el banco"
+                android:inputType="none" />
 
             <!-- Monto depositado -->
             <TextView
@@ -125,13 +125,12 @@
                 android:text="Imagen del voucher" />
 
             <ImageView
-                android:id="@+id/ivVoucher"
+                android:id="@+id/ivFotoVoucher"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/borde_recuadro"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_imagen_placeholder" />
+                android:scaleType="centerCrop" />
 
             <!-- Botón seleccionar imagen -->
             <com.google.android.material.button.MaterialButton
