@@ -12,6 +12,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         const val TABLE_GUIA = "guia"
         const val TABLE_PRODUCTO = "producto"
+        const val TABLE_BANCO = "banco"
     }
     override fun onCreate(db: SQLiteDatabase) {
 
@@ -41,9 +42,21 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             );
         """.trimIndent()
 
+        val createBanco = """
+            CREATE TABLE $TABLE_BANCO (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre TEXT UNIQUE NOT NULL
+            );
+        """.trimIndent()
+
         db.execSQL(createGuia)
         db.execSQL(createProducto)
+        db.execSQL(createBanco)
 
+        val bancosIniciales = listOf("BCP", "BBVA", "Interbank", "Scotiabank", "Banco de la Nación")
+        bancosIniciales.forEach { nombre ->
+            db.execSQL("INSERT INTO $TABLE_BANCO (nombre) VALUES ('$nombre')")
+        }
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

@@ -75,7 +75,8 @@
                 android:id="@+id/etFechaOperacion"
                 style="@style/EstiloRecuadro"
                 android:hint="DD/MM/AAAA"
-                android:inputType="text"
+                android:importantForAutofill="no"
+                android:inputType="number"
                 android:maxLength="10" />
 
             <!-- Banco -->
@@ -92,8 +93,9 @@
                 android:dropDownHeight="wrap_content"
                 android:dropDownVerticalOffset="4dp"
                 android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:hint="Seleccione el banco"
-                android:inputType="none" />
+                android:inputType="text" />
 
             <!-- Monto depositado -->
             <TextView
