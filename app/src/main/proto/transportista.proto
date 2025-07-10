@@ -1,14 +1,15 @@
 syntax = "proto3";
 
-package despacho;
+package apptransportistas;
 
-option go_package = "./despachopb";
-option java_package = "despachopb";
+option go_package = "./apptransportistaspb";
+option java_package = "apptransportistaspb";
 option java_multiple_files = true;
 
-service DespachoService {
+service AppTransportistasService {
   rpc EnviarEntregas (stream Guia) returns (EntregaResponse);
   rpc ObtenerDespachos (DespachoRequest) returns (stream Guia);
+  rpc EnviarDepositos (stream Deposito) returns (DepositoResponse);
 }
 
 message DespachoRequest {
@@ -20,9 +21,14 @@ message EntregaResponse {
   int32 total_registradas = 2;
 }
 
+message DepositoResponse {
+  string mensaje = 1;
+  int32 total_registrados = 2;
+}
+
 message Guia {
   string numero = 1;
-  string fecha = 2; // formato: "2025-07-01"
+  string fecha = 2;         // formato: "2025-07-01"
   string codigo_cliente = 3;
   string nombre_cliente = 4;
   string nro_comprobante = 5;
@@ -35,4 +41,12 @@ message Guia {
 message Producto {
   string nombre = 1;
   int32 cantidad = 2;
+}
+
+message Deposito {
+  string nro_operacion = 1;
+  string fecha = 2;         // formato: "2025-07-10"
+  int32 id_banco = 3;
+  double monto = 4;
+  bytes comprobante = 5;    // imagen del voucher como array de bytes (ideal para gRPC)
 }

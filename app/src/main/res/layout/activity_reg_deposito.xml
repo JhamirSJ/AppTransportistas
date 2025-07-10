@@ -148,7 +148,7 @@
 
             <!-- Botón registrar depósito -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnRegistrarDeposito"
+                android:id="@+id/btnRegDeposito"
                 style="@style/BotonPrincipalRojo"
                 android:text="REGISTRAR DEPÓSITO" />
         </LinearLayout>

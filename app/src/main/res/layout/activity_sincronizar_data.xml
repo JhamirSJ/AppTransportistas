@@ -21,7 +21,16 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnObtenerGuias"
         style="@style/BotonSecundarioGris"
+        android:layout_marginBottom="16dp"
         android:text="Obtener Guías"
+        android:textSize="18sp" />
+
+    <!-- Botón: Enviar depósitos -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnEnviarDepositos"
+        style="@style/BotonPrincipalRojo"
+        android:layout_marginBottom="16dp"
+        android:text="Enviar Depósitos"
         android:textSize="18sp" />
 
 </LinearLayout>

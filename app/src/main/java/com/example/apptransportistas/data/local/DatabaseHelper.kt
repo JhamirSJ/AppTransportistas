@@ -13,6 +13,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         const val TABLE_GUIA = "guia"
         const val TABLE_PRODUCTO = "producto"
         const val TABLE_BANCO = "banco"
+        const val TABLE_DEPOSITO = "deposito"
     }
     override fun onCreate(db: SQLiteDatabase) {
 
@@ -42,6 +43,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             );
         """.trimIndent()
 
+        // Tabla banco
         val createBanco = """
             CREATE TABLE $TABLE_BANCO (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -49,10 +51,26 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             );
         """.trimIndent()
 
+        // Tabla depósito
+        val createDeposito = """
+            CREATE TABLE $TABLE_DEPOSITO (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nro_operacion TEXT NOT NULL,
+                fecha TEXT NOT NULL,
+                monto REAL NOT NULL,
+                id_banco INTEGER NOT NULL,
+                comprobante_path TEXT,
+                sincronizado INTEGER DEFAULT 0,
+                FOREIGN KEY(id_banco) REFERENCES $TABLE_BANCO(id)
+            );
+        """.trimIndent()
+
         db.execSQL(createGuia)
         db.execSQL(createProducto)
         db.execSQL(createBanco)
+        db.execSQL(createDeposito)
 
+        // Insertar bancos iniciales
         val bancosIniciales = listOf("BCP", "BBVA", "Interbank", "Scotiabank", "Banco de la Nación")
         bancosIniciales.forEach { nombre ->
             db.execSQL("INSERT INTO $TABLE_BANCO (nombre) VALUES ('$nombre')")
