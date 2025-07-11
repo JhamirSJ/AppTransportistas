@@ -84,5 +84,5 @@ dependencies {
     implementation("javax.annotation:javax.annotation-api:1.3.2")
     //implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     implementation("com.github.gcacace:signature-pad:1.3.1")
-    implementation("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 }

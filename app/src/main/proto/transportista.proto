@@ -10,6 +10,7 @@ service AppTransportistasService {
   rpc EnviarEntregas (stream Guia) returns (EntregaResponse);
   rpc ObtenerDespachos (DespachoRequest) returns (stream Guia);
   rpc EnviarDepositos (stream Deposito) returns (DepositoResponse);
+  rpc EnviarPruebasEntrega (stream PruebaEntrega) returns (PruebaEntregaResponse);
 }
 
 message DespachoRequest {
@@ -24,6 +25,11 @@ message EntregaResponse {
 message DepositoResponse {
   string mensaje = 1;
   int32 total_registrados = 2;
+}
+
+message PruebaEntregaResponse {
+  string mensaje = 1;
+  int32 total_registradas = 2;
 }
 
 message Guia {
@@ -50,3 +56,12 @@ message Deposito {
   double monto = 4;
   bytes comprobante = 5;    // imagen del voucher como array de bytes (ideal para gRPC)
 }
+
+message PruebaEntrega {
+  string numero_guia = 1;
+  string fecha_registro = 2; // formato: "2025-07-11"
+  bytes firma = 3;           // Firma como imagen (PNG comprimido)
+  bytes imagen = 4;          // Imagen como comprobante (JPG o PNG comprimido)
+}
+
+

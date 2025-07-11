@@ -17,6 +17,8 @@ import apptransportistaspb.DepositoResponse
 import apptransportistaspb.EntregaResponse
 import apptransportistaspb.Guia
 import apptransportistaspb.Producto
+import apptransportistaspb.PruebaEntrega
+import apptransportistaspb.PruebaEntregaResponse
 import com.google.protobuf.ByteString
 import io.grpc.ManagedChannelBuilder
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +40,7 @@ class SincronizarDataActivity : AppCompatActivity() {
         dbHelper = DatabaseHelper(this)
 
         val btnEnviarEntregas = findViewById<MaterialButton>(R.id.btnEnviarEntregas)
-        btnEnviarEntregas.setOnClickListener { enviarEntregas() }
+        btnEnviarEntregas.setOnClickListener { enviarEntregas(); enviarPruebasEntrega() }
         val btnObtenerGuias = findViewById<MaterialButton>(R.id.btnObtenerGuias)
         btnObtenerGuias.setOnClickListener { obtenerGuias() }
         val btnEnviarDepositos = findViewById<MaterialButton>(R.id.btnEnviarDepositos)
@@ -92,8 +94,16 @@ class SincronizarDataActivity : AppCompatActivity() {
             // Recorremos las guías y las enviamos
             while (cursor.moveToNext()) {
                 val guiaId = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
-                val fechaOriginal = cursor.getString(cursor.getColumnIndexOrThrow("fecha"))
-                val fechaMysql = fechaOriginal.takeWhile { it != 'T' }
+                val fechaOriginal = cursor.getString(cursor.getColumnIndexOrThrow("fecha")) // dd/MM/yyyy
+                val formatoEntrada = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                val formatoSalida = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val fechaMysql = try {
+                    val parsedDate = formatoEntrada.parse(fechaOriginal)
+                    formatoSalida.format(parsedDate!!)
+                } catch (e: Exception) {
+                    Log.e("Fecha", "Error al convertir fecha: $fechaOriginal", e)
+                    ""
+                }
 
                 val guia = Guia.newBuilder()
                     .setNumero(cursor.getString(cursor.getColumnIndexOrThrow("numero")))
@@ -143,6 +153,99 @@ class SincronizarDataActivity : AppCompatActivity() {
         }
     }
 
+    private fun enviarPruebasEntrega() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val db = dbHelper.readableDatabase
+            val pruebasSincronizadas = mutableListOf<Long>()
+            val cursor = db.rawQuery(
+                """
+            SELECT pe.*, g.numero 
+            FROM prueba_entrega pe 
+            JOIN guia g ON g.id = pe.guia_id 
+            WHERE g.entregada = 1
+            """.trimIndent(), null
+            )
+
+            if (cursor.count == 0) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@SincronizarDataActivity, "No hay pruebas por enviar", Toast.LENGTH_SHORT).show()
+                }
+                cursor.close()
+                return@launch
+            }
+
+            val channel = ManagedChannelBuilder
+                .forAddress("192.168.10.159", 50051)
+                .usePlaintext()
+                .build()
+
+            val stub = AppTransportistasServiceGrpc.newStub(channel)
+
+            val latch = CountDownLatch(1)
+
+            val requestObserver = stub.enviarPruebasEntrega(object : StreamObserver<PruebaEntregaResponse> {
+                override fun onNext(value: PruebaEntregaResponse) {
+                    Log.d("gRPC", "Servidor respondió: ${value.mensaje} (${value.totalRegistradas})")
+                }
+
+                override fun onError(t: Throwable) {
+                    Log.e("gRPC", "❌ Error al enviar pruebas", t)
+                    latch.countDown()
+                }
+
+                override fun onCompleted() {
+                    latch.countDown()
+                }
+            })
+
+            while (cursor.moveToNext()) {
+                val numeroGuia = cursor.getString(cursor.getColumnIndexOrThrow("numero"))
+                val fechaRegistro = cursor.getString(cursor.getColumnIndexOrThrow("fecha_registro"))
+                val firmaBytes = cursor.getBlob(cursor.getColumnIndexOrThrow("firma")) ?: ByteArray(0)
+
+                val pruebaId = cursor.getLong(cursor.getColumnIndexOrThrow("id"))
+
+                val imagenPath = cursor.getString(cursor.getColumnIndexOrThrow("imagen_path")) ?: ""
+                val imagenBytes = try {
+                    val uri = Uri.parse(imagenPath)
+                    contentResolver.openInputStream(uri)?.readBytes() ?: ByteArray(0)
+                } catch (e: Exception) {
+                    Log.e("gRPC", "⚠️ Error leyendo imagen desde URI: $imagenPath", e)
+                    ByteArray(0)
+                }
+
+                val prueba = PruebaEntrega.newBuilder()
+                    .setNumeroGuia(numeroGuia)
+                    .setFechaRegistro(fechaRegistro)
+
+                if (firmaBytes.isNotEmpty()) prueba.setFirma(ByteString.copyFrom(firmaBytes))
+                if (imagenBytes.isNotEmpty()) prueba.setImagen(ByteString.copyFrom(imagenBytes))
+
+                try {
+                    requestObserver.onNext(prueba.build())
+                    pruebasSincronizadas.add(pruebaId)
+                } catch (e: Exception) {
+                    Log.e("gRPC", "❌ Error enviando prueba", e)
+                }
+            }
+
+            requestObserver.onCompleted()
+            cursor.close()
+            latch.await()
+
+            channel.shutdownNow()
+
+            val dbWritable = dbHelper.writableDatabase
+            for (id in pruebasSincronizadas) {
+                dbWritable.execSQL("UPDATE prueba_entrega SET sincronizado = 1 WHERE id = ?", arrayOf(id))
+            }
+
+            withContext(Dispatchers.Main) {
+                Toast.makeText(this@SincronizarDataActivity, "📤 Pruebas enviadas correctamente", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun obtenerGuias() {
         lifecycleScope.launch(Dispatchers.IO) {
             val db = dbHelper.writableDatabase
@@ -179,7 +282,7 @@ class SincronizarDataActivity : AppCompatActivity() {
                                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                             """.trimIndent(), arrayOf(
                                 guia.numero,
-                                guia.fecha,
+                                formatearFecha(guia.fecha),
                                 guia.codigoCliente,
                                 guia.nombreCliente,
                                 guia.nroComprobante,
@@ -333,6 +436,21 @@ class SincronizarDataActivity : AppCompatActivity() {
                     this@SincronizarDataActivity, "Depósitos enviados con éxito", Toast.LENGTH_SHORT
                 ).show()
             }
+        }
+    }
+
+    private fun formatearFecha(fechaOriginal: String): String {
+        return try {
+            val formatoEntrada = when {
+                fechaOriginal.contains(" ") -> SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                else -> SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            }
+
+            val fecha = formatoEntrada.parse(fechaOriginal)
+            val formatoSalida = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            formatoSalida.format(fecha!!)
+        } catch (e: Exception) {
+            fechaOriginal // Devuelve la original si falla el parseo
         }
     }
 

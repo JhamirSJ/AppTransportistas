@@ -1,27 +1,35 @@
 package com.example.apptransportistas.registrarentregaguias.adjuntarpruebaentrega
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.apptransportistas.R
 import com.example.apptransportistas.data.local.DatabaseHelper
 import com.example.apptransportistas.data.local.Repository
 import com.example.apptransportistas.menu.MenuActivity
 import com.github.gcacace.signaturepad.views.SignaturePad
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 
 class AdjuntarPruebaActivity : AppCompatActivity() {
 
-    private val PICK_IMAGE_REQUEST = 100
-    private var imagenUri: Uri? = null
+    private var imagenSeleccionadaUri: Uri? = null
     private lateinit var dbHelper: DatabaseHelper
     private lateinit var repository: Repository
     private var guiaId: Long = -1L
+
+    private lateinit var imagenPickerLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,47 +43,71 @@ class AdjuntarPruebaActivity : AppCompatActivity() {
         val btnBorrarFirma = findViewById<Button>(R.id.btnBorrarFirma)
         val btnSeleccionarImagen = findViewById<Button>(R.id.btnSeleccionarImagen)
         val btnRegEntrega = findViewById<MaterialButton>(R.id.btnRegEntrega)
+        val imageView = findViewById<ImageView>(R.id.ivFotoComprobante)
 
         signaturePad.setSaveEnabled(false)
 
-        btnBorrarFirma.setOnClickListener {
-            signaturePad.clear()
+        btnBorrarFirma.setOnClickListener { signaturePad.clear() }
+
+        imagenPickerLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode ==RESULT_OK) {
+                val originalUri = result.data?.data
+                if (originalUri != null) {
+                    try {
+                        val inputStream = contentResolver.openInputStream(originalUri)
+                        val file = File(cacheDir, "prueba_entrega_${System.currentTimeMillis()}.jpg")
+                        val outputStream = FileOutputStream(file)
+                        inputStream?.copyTo(outputStream)
+                        inputStream?.close()
+                        outputStream.close()
+
+                        imagenSeleccionadaUri = Uri.fromFile(file)
+                        imageView.setImageURI(imagenSeleccionadaUri)
+                    } catch (e: Exception) {
+                        Toast.makeText(this, "Error al procesar imagen", Toast.LENGTH_SHORT).show()
+                        e.printStackTrace()
+                    }
+                }
+            }
         }
 
         btnSeleccionarImagen.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK).apply {
-                type = "image/*"
-            }
-            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+            val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
+            imagenPickerLauncher.launch(intent)
         }
 
         btnRegEntrega.setOnClickListener {
-            btnRegEntrega.isEnabled = false
-            if (guiaId != -1L) {
+            val hayFirma = !signaturePad.isEmpty
+            val hayImagen = imagenSeleccionadaUri != null
 
-                val success = repository.marcarGuiaComoEntregada(guiaId)
-
-                if (success) {
-                    Toast.makeText(this, "Entrega registrada correctamente ✅", Toast.LENGTH_SHORT)
-                        .show()
-                    navigateToMenu()
-                } else {
-                    Toast.makeText(this, "❌ No se encontró la guía", Toast.LENGTH_SHORT).show()
-                    btnRegEntrega.isEnabled = true
-                }
-            } else {
-                Toast.makeText(this, "❌ Guía no válida", Toast.LENGTH_SHORT).show()
+            if (!hayFirma && !hayImagen) {
+                Toast.makeText(this, "Adjunta al menos una prueba (firma o imagen)", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
-        }
-    }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+            btnRegEntrega.isEnabled = false
+            val firmaBitmap = if (hayFirma) signaturePad.signatureBitmap else null
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
-            imagenUri = data?.data
-            val imageView = findViewById<ImageView>(R.id.ivFotoComprobante)
-            imageView.setImageURI(imagenUri)
+            lifecycleScope.launch(Dispatchers.IO) {
+                val pruebaGuardada = repository.guardarPruebaEntrega(
+                    guiaId,
+                    firmaBitmap,
+                    imagenSeleccionadaUri?.toString() ?: ""
+                )
+                val guiaMarcada = repository.marcarGuiaComoEntregada(guiaId)
+
+                withContext(Dispatchers.Main) {
+                    if (pruebaGuardada && guiaMarcada) {
+                        Toast.makeText(this@AdjuntarPruebaActivity, "Entrega registrada correctamente ✅", Toast.LENGTH_SHORT).show()
+                        navigateToMenu()
+                    } else {
+                        Toast.makeText(this@AdjuntarPruebaActivity, "❌ No se pudo registrar la entrega", Toast.LENGTH_SHORT).show()
+                        btnRegEntrega.isEnabled = true
+                    }
+                }
+            }
         }
     }
 
