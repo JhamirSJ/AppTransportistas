@@ -449,7 +449,7 @@ class SincronizarDataActivity : AppCompatActivity() {
             val fecha = formatoEntrada.parse(fechaOriginal)
             val formatoSalida = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
             formatoSalida.format(fecha!!)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             fechaOriginal // Devuelve la original si falla el parseo
         }
     }
