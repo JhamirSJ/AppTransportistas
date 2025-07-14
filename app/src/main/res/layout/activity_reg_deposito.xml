@@ -117,8 +117,7 @@
 
             <TextView
                 android:id="@+id/tvDepositoPendiente"
-                style="@style/EstiloRecuadro"
-                android:text="0.00" />
+                style="@style/EstiloRecuadro" />
 
             <!-- Imagen del voucher -->
             <TextView

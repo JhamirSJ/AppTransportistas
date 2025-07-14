@@ -13,13 +13,15 @@ class Repository(private val dbHelper: DatabaseHelper) {
         val db = dbHelper.writableDatabase
 
         // Obtiene el importe_x_cobrar actual
-        val cursor = db.rawQuery("SELECT importe_x_cobrar FROM guia WHERE id = ?", arrayOf(guiaId.toString()))
+        val cursor = db.rawQuery(
+            "SELECT importe_x_cobrar FROM guia WHERE id = ?", arrayOf(guiaId.toString())
+        )
         val importeXCobrar = if (cursor.moveToFirst()) cursor.getDouble(0) else null
         cursor.close()
 
         if (importeXCobrar == null) return false
 
-        // Actualiza entregada = 1 y monto_cobrado = importe_x_cobrar
+        // Actualiza entregada y monto_cobrado = importe_x_cobrar
         val values = ContentValues().apply {
             put("entregada", 1)
             put("monto_cobrado", importeXCobrar)
@@ -33,7 +35,9 @@ class Repository(private val dbHelper: DatabaseHelper) {
         val db = dbHelper.writableDatabase
         val values = ContentValues().apply {
             put("guia_id", guiaId)
-            put("fecha_registro", SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date()))
+            put(
+                "fecha_registro", SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+            )
             firmaBitmap?.let { put("firma", bitmapToByteArray(it)) }
             put("imagen_path", imagenPath)
             put("sincronizado", 0)
