@@ -80,11 +80,20 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSyncData"
         style="@style/BotonMenuPrincipal"
-        android:layout_marginBottom="200dp"
         android:text="SINCRONIZAR APP"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnGenPDF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnRegDeposito" />
 
+    <!-- Botón SINCRONIZAR APP -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGenPDF"
+        style="@style/BotonMenuPrincipal"
+        android:layout_marginBottom="200dp"
+        android:text="GENERAR PDF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSyncData" />
 </androidx.constraintlayout.widget.ConstraintLayout>

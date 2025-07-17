@@ -17,12 +17,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppTransportistas"
         tools:targetApi="31">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fileprovider_paths" />
+        </provider>
         <service
             android:name=".ubicacion.TrackingService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="location" />
-
         <activity
             android:name=".registrarentregaguias.adjuntarpruebaentrega.AdjuntarPruebaActivity"
             android:exported="false" />
