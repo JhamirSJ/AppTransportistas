@@ -2,6 +2,9 @@ package com.example.apptransportistas.data.local
 
 import android.content.ContentValues
 import android.graphics.Bitmap
+import com.example.apptransportistas.liquidacion.GuiaLiquidacion
+import com.example.apptransportistas.liquidacion.Liquidacion
+import com.example.apptransportistas.liquidacion.ProductoLiquidacion
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -50,4 +53,54 @@ class Repository(private val dbHelper: DatabaseHelper) {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
         return stream.toByteArray()
     }
+
+    fun obtenerLiquidacionDelDia(fecha: String): Liquidacion {
+        val db = dbHelper.readableDatabase
+        val guias = mutableListOf<GuiaLiquidacion>()
+        var totalBruto = 0.0
+        var totalIgv = 0.0
+
+        val cursorGuias = db.rawQuery("""
+        SELECT id, numero FROM guia 
+        WHERE entregada = 1
+    """.trimIndent(), null)
+
+        while (cursorGuias.moveToNext()) {
+            val guiaId = cursorGuias.getLong(0)
+            val codigoGuia = cursorGuias.getString(1)
+
+            val productos = mutableListOf<ProductoLiquidacion>()
+            val cursorProductos = db.rawQuery("""
+            SELECT nombre, cantidad 
+            FROM producto 
+            WHERE id_guia = ?
+        """.trimIndent(), arrayOf(guiaId.toString()))
+
+            while (cursorProductos.moveToNext()) {
+                val nombre = cursorProductos.getString(0)
+                val cantidad = cursorProductos.getInt(1)
+
+                productos.add(ProductoLiquidacion(nombre, cantidad))
+            }
+
+            cursorProductos.close()
+            guias.add(GuiaLiquidacion(codigoGuia, productos))
+        }
+
+        cursorGuias.close()
+        db.close()
+
+        return Liquidacion(
+            id = 0,
+            fechaEmision = fecha,
+            transportistaNombre = "Transportes S.A.",
+            transportistaRuc = "123456789",
+            guias = guias,
+            importeBruto = totalBruto,
+            importeIgv = totalIgv,
+            importeTotal = totalBruto + totalIgv,
+            incluyeIgv = true
+        )
+    }
+
 }

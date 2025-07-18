@@ -15,6 +15,7 @@ import androidx.core.content.FileProvider
 import com.example.apptransportistas.R
 import com.example.apptransportistas.registrardeposito.RegDepositoActivity
 import com.example.apptransportistas.guias.misguias.MisGuiasActivity
+import com.example.apptransportistas.liquidacion.GenerarLiquidacionActivity
 import com.example.apptransportistas.registrarentregaguias.RegGuiasActivity
 import com.example.apptransportistas.sincronizardata.SincronizarDataActivity
 import com.example.apptransportistas.ubicacion.TrackingService
@@ -43,8 +44,10 @@ class MenuActivity : AppCompatActivity() {
         btnSyncData.setOnClickListener { navigateToSincronizarData() }
         btnRegDeposito.setOnClickListener { navigateToRegDeposito() }
         btnGenerarPDF.setOnClickListener {
-            val file = generarPDF(this)
-            abrirPDFConAppExterna(this, file)
+            val intent = Intent(this, GenerarLiquidacionActivity::class.java)
+            intent.putExtra("fecha", "2025-07-18")
+            startActivity(intent)
+
         }
 
     }
@@ -103,54 +106,5 @@ class MenuActivity : AppCompatActivity() {
             }
         }
     }
-
-    fun generarPDF(context: Context): File {
-        val pdfDocument = PdfDocument()
-
-        val pageInfo = PdfDocument.PageInfo.Builder(300, 600, 1).create()
-        val page = pdfDocument.startPage(pageInfo)
-        val canvas = page.canvas
-        val paint = Paint()
-
-        paint.textSize = 12f
-        canvas.drawText("LIQUIDACIÓN DE TRANSPORTE", 10f, 25f, paint)
-        canvas.drawText("Transportista: RUC 123456789 - Transportes S.A.", 10f, 50f, paint)
-        canvas.drawText("Fecha de emisión: 2025-07-16", 10f, 75f, paint)
-
-        pdfDocument.finishPage(page)
-
-        val documentsDir = File(context.getExternalFilesDir(null), "Liquidaciones")
-        if (!documentsDir.exists()) documentsDir.mkdirs()
-
-        val file = File(documentsDir, "liquidacion.pdf")
-        pdfDocument.writeTo(FileOutputStream(file))
-        pdfDocument.close()
-
-        Toast.makeText(context, "PDF generado en: ${file.absolutePath}", Toast.LENGTH_LONG).show()
-        return file
-    }
-
-
-    fun abrirPDFConAppExterna(context: Context, file: File) {
-        val uri: Uri = FileProvider.getUriForFile(
-            context,
-            "${context.packageName}.fileprovider",
-            file
-        )
-
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(uri, "application/pdf")
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
-
-        val chooser = Intent.createChooser(intent, "Abrir PDF con...")
-
-        if (chooser.resolveActivity(context.packageManager) != null) {
-            context.startActivity(chooser)
-        } else {
-            Toast.makeText(context, "No hay una app para abrir PDFs", Toast.LENGTH_SHORT).show()
-        }
-    }
-
 
 }
