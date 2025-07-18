@@ -1,17 +1,12 @@
 package com.example.apptransportistas.menu
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Paint
-import android.graphics.pdf.PdfDocument
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.FileProvider
 import com.example.apptransportistas.R
 import com.example.apptransportistas.registrardeposito.RegDepositoActivity
 import com.example.apptransportistas.guias.misguias.MisGuiasActivity
@@ -20,8 +15,6 @@ import com.example.apptransportistas.registrarentregaguias.RegGuiasActivity
 import com.example.apptransportistas.sincronizardata.SincronizarDataActivity
 import com.example.apptransportistas.ubicacion.TrackingService
 import com.google.android.material.button.MaterialButton
-import java.io.File
-import java.io.FileOutputStream
 
 class MenuActivity : AppCompatActivity() {
 
