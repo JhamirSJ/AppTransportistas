@@ -6,8 +6,6 @@ import com.example.apptransportistas.liquidacion.GuiaLiquidacion
 import com.example.apptransportistas.liquidacion.Liquidacion
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
@@ -59,7 +57,7 @@ class Repository(private val dbHelper: DatabaseHelper) {
         val db = dbHelper.readableDatabase
         val guias = mutableListOf<GuiaLiquidacion>()
 
-        val hoy = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
+        val hoy = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 
         val cursorGuias = db.rawQuery("""
         SELECT numero, monto_cobrado 
