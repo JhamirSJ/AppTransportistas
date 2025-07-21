@@ -2,22 +2,18 @@ package com.example.apptransportistas.liquidacion
 
 data class Liquidacion(
     val id: Int,
+    val rucTransportista: String,
+    val nombreTransportista: String,
     val fechaEmision: String,
-    val transportistaNombre: String,
-    val transportistaRuc: String,
-    val guias: List<GuiaLiquidacion>,
-    val importeBruto: Double,
-    val importeIgv: Double,
-    val importeTotal: Double,
-    val incluyeIgv: Boolean
+    val fechaDesde: String,
+    val fechaHasta: String,
+    val tarifaCodigo: String,
+    val tarifaNombre: String,
+    val guias: List<GuiaLiquidacion>
 )
 
 data class GuiaLiquidacion(
-    val idGuia: String,
-    val productos: List<ProductoLiquidacion>
-)
-
-data class ProductoLiquidacion(
-    val nombre: String,
-    val cantidad: Int
+    val numero: String,
+    val fecha: String,
+    val importe: Double
 )

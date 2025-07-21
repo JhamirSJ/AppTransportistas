@@ -4,9 +4,10 @@ import android.content.ContentValues
 import android.graphics.Bitmap
 import com.example.apptransportistas.liquidacion.GuiaLiquidacion
 import com.example.apptransportistas.liquidacion.Liquidacion
-import com.example.apptransportistas.liquidacion.ProductoLiquidacion
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
@@ -54,53 +55,40 @@ class Repository(private val dbHelper: DatabaseHelper) {
         return stream.toByteArray()
     }
 
-    fun obtenerLiquidacionDelDia(fecha: String): Liquidacion {
+    fun obtenerLiquidacionDelDia(fechaEmision: String): Liquidacion {
         val db = dbHelper.readableDatabase
         val guias = mutableListOf<GuiaLiquidacion>()
-        var totalBruto = 0.0
-        var totalIgv = 0.0
+
+        val hoy = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
 
         val cursorGuias = db.rawQuery("""
-        SELECT id, numero FROM guia 
+        SELECT numero, monto_cobrado 
+        FROM guia 
         WHERE entregada = 1
-    """.trimIndent(), null)
+        """.trimIndent(), null)
 
         while (cursorGuias.moveToNext()) {
-            val guiaId = cursorGuias.getLong(0)
-            val codigoGuia = cursorGuias.getString(1)
-
-            val productos = mutableListOf<ProductoLiquidacion>()
-            val cursorProductos = db.rawQuery("""
-            SELECT nombre, cantidad 
-            FROM producto 
-            WHERE id_guia = ?
-        """.trimIndent(), arrayOf(guiaId.toString()))
-
-            while (cursorProductos.moveToNext()) {
-                val nombre = cursorProductos.getString(0)
-                val cantidad = cursorProductos.getInt(1)
-
-                productos.add(ProductoLiquidacion(nombre, cantidad))
-            }
-
-            cursorProductos.close()
-            guias.add(GuiaLiquidacion(codigoGuia, productos))
+            val numero = cursorGuias.getString(0)
+            val importe = cursorGuias.getDouble(1)
+            val fechaEntrega = hoy
+            guias.add(GuiaLiquidacion(numero, fechaEntrega, importe))
         }
 
         cursorGuias.close()
         db.close()
 
         return Liquidacion(
-            id = 0,
-            fechaEmision = fecha,
-            transportistaNombre = "Transportes S.A.",
-            transportistaRuc = "123456789",
-            guias = guias,
-            importeBruto = totalBruto,
-            importeIgv = totalIgv,
-            importeTotal = totalBruto + totalIgv,
-            incluyeIgv = true
+            id = 114,
+            rucTransportista = "20609128071",
+            nombreTransportista = "INVERSIONES G & L SOCIEDAD ANONIMA CERRADA",
+            fechaEmision = fechaEmision,
+            fechaDesde = "21/07/2025",
+            fechaHasta = "21/07/2025",
+            tarifaCodigo = "TF001",
+            tarifaNombre = "PRUEBA DE TARIFA FIJA",
+            guias = guias
         )
     }
+
 
 }
