@@ -12,14 +12,14 @@
         android:id="@+id/tvTitulo"
         style="@style/TituloPantalla"
         android:text="SELECCIONAR GUÍA"
-        app:layout_constraintBottom_toTopOf="@id/etCampoBuscar"
+        app:layout_constraintBottom_toTopOf="@id/etBuscarGuia"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Campo de búsqueda -->
     <EditText
-        android:id="@+id/etCampoBuscar"
+        android:id="@+id/etBuscarGuia"
         style="@style/CampoBusqueda"
         android:hint=" Buscar guía"
         app:layout_constraintBottom_toTopOf="@id/rvListaGuias"
@@ -34,6 +34,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etCampoBuscar" />
+        app:layout_constraintTop_toBottomOf="@id/etBuscarGuia" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

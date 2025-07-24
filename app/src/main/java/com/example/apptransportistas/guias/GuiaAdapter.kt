@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.apptransportistas.R
 
 class GuiaAdapter(
-    private val guias: List<Guia>,
+    listaInicial: List<Guia>,
     private val onGuiaClick: (Guia) -> Unit
 ) : RecyclerView.Adapter<GuiaViewHolder>() {
+
+    private val guias = listaInicial.toMutableList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GuiaViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_guia, parent, false)
@@ -20,4 +22,11 @@ class GuiaAdapter(
     override fun onBindViewHolder(holder: GuiaViewHolder, position: Int) {
         holder.bind(guias[position])
     }
+
+    fun actualizarLista(nuevaLista: List<Guia>) {
+        guias.clear()
+        guias.addAll(nuevaLista)
+        notifyDataSetChanged()
+    }
 }
+

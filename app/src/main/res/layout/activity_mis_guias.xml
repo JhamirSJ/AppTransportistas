@@ -19,7 +19,7 @@
 
     <!-- Campo de búsqueda -->
     <EditText
-        android:id="@+id/etBuscarGuia"
+        android:id="@+id/etBuscarMiGuia"
         style="@style/CampoBusqueda"
         android:hint=" Buscar guía"
         app:layout_constraintBottom_toTopOf="@id/tvFechaActual"
@@ -34,7 +34,7 @@
         app:layout_constraintBottom_toTopOf="@id/rvGuias"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etBuscarGuia"
+        app:layout_constraintTop_toBottomOf="@id/etBuscarMiGuia"
         tools:text="HOY: DD/MM/AAAA" />
 
     <!-- Lista de guías -->

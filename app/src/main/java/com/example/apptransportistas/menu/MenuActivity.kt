@@ -3,6 +3,7 @@ package com.example.apptransportistas.menu
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,8 @@ import com.example.apptransportistas.registrarentregaguias.RegGuiasActivity
 import com.example.apptransportistas.sincronizardata.SincronizarDataActivity
 import com.example.apptransportistas.ubicacion.TrackingService
 import com.google.android.material.button.MaterialButton
+import java.util.Date
+import java.util.Locale
 
 class MenuActivity : AppCompatActivity() {
 
@@ -38,9 +41,8 @@ class MenuActivity : AppCompatActivity() {
         btnRegDeposito.setOnClickListener { navigateToRegDeposito() }
         btnGenerarPDF.setOnClickListener {
             val intent = Intent(this, GenerarLiquidacionActivity::class.java)
-            intent.putExtra("fecha", "2025-07-18")
+            intent.putExtra("fecha", SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date()))
             startActivity(intent)
-
         }
 
     }

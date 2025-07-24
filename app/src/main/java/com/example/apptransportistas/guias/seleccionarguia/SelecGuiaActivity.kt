@@ -2,6 +2,9 @@ package com.example.apptransportistas.guias.seleccionarguia
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +18,8 @@ class SelecGuiaActivity : AppCompatActivity() {
     private lateinit var rvListaGuias: RecyclerView
     private lateinit var listaGuias: List<Guia>
     private lateinit var dbHelper: DatabaseHelper
+    private lateinit var etBuscarGuia: EditText
+    private lateinit var guiaAdapter: GuiaAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,10 +27,11 @@ class SelecGuiaActivity : AppCompatActivity() {
 
         dbHelper = DatabaseHelper(this)
         rvListaGuias = findViewById(R.id.rvListaGuias)
+        etBuscarGuia = findViewById(R.id.etBuscarGuia)
 
         listaGuias = obtenerGuiasDB()
 
-        val adapter = GuiaAdapter(listaGuias) { guiaSeleccionada ->
+       guiaAdapter = GuiaAdapter(listaGuias) { guiaSeleccionada ->
             val intent = Intent()
             intent.putExtra("guiaSeleccionada", guiaSeleccionada)
             setResult(RESULT_OK, intent)
@@ -33,7 +39,9 @@ class SelecGuiaActivity : AppCompatActivity() {
         }
 
         rvListaGuias.layoutManager = LinearLayoutManager(this)
-        rvListaGuias.adapter = adapter
+        rvListaGuias.adapter = guiaAdapter
+
+        initSearchBox()
     }
 
     private fun obtenerGuiasDB(): List<Guia> {
@@ -57,4 +65,22 @@ class SelecGuiaActivity : AppCompatActivity() {
         cursor.close()
         return lista
     }
+
+    private fun initSearchBox() {
+        etBuscarGuia.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val texto = s.toString().lowercase()
+                val filtradas = listaGuias.filter {
+                    it.numero.lowercase().contains(texto) ||
+                            it.nombre.lowercase().contains(texto) ||
+                            it.codigo.lowercase().contains(texto)
+                }
+                guiaAdapter.actualizarLista(filtradas)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+    }
+
 }

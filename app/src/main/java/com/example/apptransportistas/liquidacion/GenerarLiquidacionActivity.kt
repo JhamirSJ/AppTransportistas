@@ -80,7 +80,6 @@ class GenerarLiquidacionActivity : AppCompatActivity() {
 
         // TABLA
         val tableStartX = leftMargin
-        val tableWidth = pageInfo.pageWidth - 2 * leftMargin
         val columnWidths = listOf(200f, 100f, 100f)
         val headers = listOf("GUÍA", "FECHA", "IMPORTE")
         val rowHeight = 25f
