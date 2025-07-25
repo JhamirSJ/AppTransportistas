@@ -88,5 +88,12 @@ class TrackingService : Service() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+        stopSelf()
+        Log.d("TrackingService", "App cerrada: servicio detenido")
+    }
+
     override fun onBind(intent: Intent?): IBinder? = null
 }

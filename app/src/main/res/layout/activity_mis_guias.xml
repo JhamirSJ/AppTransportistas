@@ -12,7 +12,7 @@
         android:id="@+id/tvEncabezado"
         style="@style/EncabezadoPantalla"
         android:text="Mis guías"
-        app:layout_constraintBottom_toTopOf="@id/etBuscarGuia"
+        app:layout_constraintBottom_toTopOf="@id/etBuscarMiGuia"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,10 +22,46 @@
         android:id="@+id/etBuscarMiGuia"
         style="@style/CampoBusqueda"
         android:hint=" Buscar guía"
-        app:layout_constraintBottom_toTopOf="@id/tvFechaActual"
+        app:layout_constraintBottom_toTopOf="@id/filtroGuias"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvEncabezado" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/filtroGuias"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        app:singleSelection="true"
+        app:layout_constraintTop_toBottomOf="@id/etBuscarMiGuia"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tvFechaActual">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnTodos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/red_sj"
+            android:text="Todos" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnEntregadas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/green"
+            android:text="Entregadas" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNoEntregadas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/gray"
+            android:text="No Entregadas" />
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
 
     <!-- Fecha Actual -->
     <TextView
@@ -34,7 +70,7 @@
         app:layout_constraintBottom_toTopOf="@id/rvGuias"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etBuscarMiGuia"
+        app:layout_constraintTop_toBottomOf="@id/filtroGuias"
         tools:text="HOY: DD/MM/AAAA" />
 
     <!-- Lista de guías -->
