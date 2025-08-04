@@ -44,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:backgroundTint="@color/red_sj"
+            android:textColor="@color/white"
             android:text="Todos" />
 
         <com.google.android.material.button.MaterialButton
@@ -52,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:backgroundTint="@color/green"
+            android:textColor="@color/white"
             android:text="Entregadas" />
 
         <com.google.android.material.button.MaterialButton
@@ -59,6 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/gray"
+            android:textColor="@color/white"
             android:text="No Entregadas" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
 

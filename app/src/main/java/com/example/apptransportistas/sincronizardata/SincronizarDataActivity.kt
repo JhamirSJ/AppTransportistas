@@ -68,7 +68,7 @@ class SincronizarDataActivity : AppCompatActivity() {
 
             // Establecer canal gRPC
             val channel =
-                ManagedChannelBuilder.forAddress("192.168.10.159", 50051).usePlaintext().build()
+                ManagedChannelBuilder.forAddress("192.168.10.63", 50051).usePlaintext().build()
 
             val stub = AppTransportistasServiceGrpc.newStub(channel)
 
@@ -175,7 +175,7 @@ class SincronizarDataActivity : AppCompatActivity() {
             }
 
             val channel = ManagedChannelBuilder
-                .forAddress("192.168.10.159", 50051)
+                .forAddress("192.168.10.63", 50051)
                 .usePlaintext()
                 .build()
 
@@ -251,9 +251,9 @@ class SincronizarDataActivity : AppCompatActivity() {
             val db = dbHelper.writableDatabase
 
             val channel = ManagedChannelBuilder.forAddress(
-                    "192.168.10.159",
+                    "192.168.10.63",
                     50051
-                ) // o IP local si usas un celular
+                )
                 .usePlaintext().build()
 
             val stub = AppTransportistasServiceGrpc.newBlockingStub(channel)
@@ -359,7 +359,7 @@ class SincronizarDataActivity : AppCompatActivity() {
             }
 
             val channel =
-                ManagedChannelBuilder.forAddress("192.168.10.159", 50051).usePlaintext().build()
+                ManagedChannelBuilder.forAddress("192.168.10.63", 50051).usePlaintext().build()
 
             val stub = AppTransportistasServiceGrpc.newStub(channel)
             val latch = CountDownLatch(1)
