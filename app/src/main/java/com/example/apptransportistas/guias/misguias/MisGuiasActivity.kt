@@ -40,15 +40,8 @@ class MisGuiasActivity : AppCompatActivity() {
         rvListaGuias.layoutManager = LinearLayoutManager(this)
         rvListaGuias.adapter = adapter
 
-        FechaActual()
         initSearchBox()
         initFiltroBotones()
-    }
-
-    private fun FechaActual() {
-        val tvFecha = findViewById<TextView>(R.id.tvFechaActual)
-        val fechaActual = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
-        tvFecha.text = "Hoy: $fechaActual"
     }
 
     private fun obtenerGuiasDB(): List<Guia> {

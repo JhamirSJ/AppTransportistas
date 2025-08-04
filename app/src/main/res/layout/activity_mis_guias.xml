@@ -36,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@id/etBuscarMiGuia"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tvFechaActual">
+        app:layout_constraintBottom_toTopOf="@id/filtroGuias">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnTodos"
@@ -65,17 +65,6 @@
             android:text="No Entregadas" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
-
-    <!-- Fecha Actual -->
-    <TextView
-        android:id="@+id/tvFechaActual"
-        style="@style/TextoFechaActual"
-        app:layout_constraintBottom_toTopOf="@id/rvGuias"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/filtroGuias"
-        tools:text="HOY: DD/MM/AAAA" />
-
     <!-- Lista de guías -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvGuias"
@@ -83,6 +72,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvFechaActual" />
+        app:layout_constraintTop_toBottomOf="@id/filtroGuias" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
