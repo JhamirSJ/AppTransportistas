@@ -19,8 +19,10 @@ import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileOutputStream
+import android.content.ContentValues
+import android.os.Environment
+import android.provider.MediaStore
+
 
 class AdjuntarPruebaActivity : AppCompatActivity() {
 
@@ -29,7 +31,7 @@ class AdjuntarPruebaActivity : AppCompatActivity() {
     private lateinit var repository: Repository
     private var guiaId: Long = -1L
 
-    private lateinit var imagenPickerLauncher: ActivityResultLauncher<Intent>
+    private lateinit var cameraLauncher: ActivityResultLauncher<Uri>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,33 +51,20 @@ class AdjuntarPruebaActivity : AppCompatActivity() {
 
         btnBorrarFirma.setOnClickListener { signaturePad.clear() }
 
-        imagenPickerLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode ==RESULT_OK) {
-                val originalUri = result.data?.data
-                if (originalUri != null) {
-                    try {
-                        val inputStream = contentResolver.openInputStream(originalUri)
-                        val file = File(cacheDir, "prueba_entrega_${System.currentTimeMillis()}.jpg")
-                        val outputStream = FileOutputStream(file)
-                        inputStream?.copyTo(outputStream)
-                        inputStream?.close()
-                        outputStream.close()
-
-                        imagenSeleccionadaUri = Uri.fromFile(file)
-                        imageView.setImageURI(imagenSeleccionadaUri)
-                    } catch (e: Exception) {
-                        Toast.makeText(this, "Error al procesar imagen", Toast.LENGTH_SHORT).show()
-                        e.printStackTrace()
-                    }
-                }
+        cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+                imageView.setImageURI(imagenSeleccionadaUri)
+            } else {
+                // Si falla, eliminar la entrada en MediaStore
+                imagenSeleccionadaUri?.let { contentResolver.delete(it, null, null) }
+                imagenSeleccionadaUri = null
+                Toast.makeText(this, "Foto cancelada o fallida", Toast.LENGTH_SHORT).show()
             }
         }
 
-        btnSeleccionarImagen.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
-            imagenPickerLauncher.launch(intent)
+        val btnTomarFoto = findViewById<Button>(R.id.btnSeleccionarImagen)
+        btnTomarFoto.setOnClickListener {
+            tomarFoto()
         }
 
         btnRegEntrega.setOnClickListener {
@@ -109,6 +98,26 @@ class AdjuntarPruebaActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun tomarFoto() {
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "foto_${System.currentTimeMillis()}.jpg")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(
+                MediaStore.Images.Media.RELATIVE_PATH,
+                Environment.DIRECTORY_PICTURES + "/AppTransportistas"
+            )
+        }
+
+        imagenSeleccionadaUri = contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            contentValues
+        )
+
+        imagenSeleccionadaUri?.let { uri ->
+            cameraLauncher.launch(uri)
+        } ?: Toast.makeText(this, "No se pudo crear la imagen", Toast.LENGTH_SHORT).show()
     }
 
     private fun navigateToMenu() {
