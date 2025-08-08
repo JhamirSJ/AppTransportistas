@@ -1,5 +1,11 @@
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Ruta para las fotos -->
     <external-path
         name="dcim"
         path="DCIM/PruebasEntregas/" />
+
+    <!-- Nueva ruta para PDFs en "files" -->
+    <external-files-path
+        name="external_files"
+        path="." />
 </paths>

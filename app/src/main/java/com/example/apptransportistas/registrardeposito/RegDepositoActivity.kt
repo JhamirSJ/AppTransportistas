@@ -1,7 +1,6 @@
 package com.example.apptransportistas.registrardeposito
 
 import android.content.ContentValues
-import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Bundle
@@ -21,16 +20,16 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.apptransportistas.data.local.DatabaseHelper
 import com.example.apptransportistas.util.DateInputMask
-import java.io.File
-import java.io.FileOutputStream
 import java.util.Locale
 import android.text.TextWatcher
+import android.provider.MediaStore
 
 class RegDepositoActivity : AppCompatActivity() {
 
-    private var imagenUri: Uri? = null
     private lateinit var dbHelper: DatabaseHelper
-    private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
+
+    private lateinit var cameraLauncher: ActivityResultLauncher<Uri>
+    private var imagenUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +39,7 @@ class RegDepositoActivity : AppCompatActivity() {
         FechaActual()
 
         val etFechaOperacion = findViewById<EditText>(R.id.etFechaOperacion)
-        val btnSeleccionarImagen = findViewById<Button>(R.id.btnSeleccionarImagen)
+        val btnTomarFoto = findViewById<Button>(R.id.btnTomarFoto)
         val btnRegDeposito = findViewById<Button>(R.id.btnRegDeposito)
         val ivFotoVoucher = findViewById<ImageView>(R.id.ivFotoVoucher)
         val etMontoDepositado = findViewById<EditText>(R.id.etMontoDepositado)
@@ -71,33 +70,6 @@ class RegDepositoActivity : AppCompatActivity() {
             }
         }
 
-        // Inicializa el ActivityResultLauncher
-        pickImageLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == RESULT_OK) {
-                val uri = result.data?.data
-                if (uri != null) {
-                    try {
-                        val inputStream = contentResolver.openInputStream(uri)
-                        val file = File(cacheDir, "deposito_${System.currentTimeMillis()}.jpg")
-                        val outputStream = FileOutputStream(file)
-                        inputStream?.copyTo(outputStream)
-                        inputStream?.close()
-                        outputStream.close()
-
-                        imagenUri = Uri.fromFile(file)
-                        ivFotoVoucher.setImageURI(imagenUri)
-                        Log.d("RegDeposito", "Imagen guardada en: $imagenUri")
-                    } catch (e: Exception) {
-                        Toast.makeText(this, "Error al procesar imagen", Toast.LENGTH_SHORT).show()
-                        e.printStackTrace()
-                    }
-                }
-
-            }
-        }
-
         etMontoDepositado.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 actualizarDepositoPendiente()
@@ -107,15 +79,63 @@ class RegDepositoActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
 
-        btnSeleccionarImagen.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK).apply {
-                type = "image/*"
+        cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            if (success) {
+                imagenUri?.let { uri ->
+                    findViewById<ImageView>(R.id.ivFotoVoucher).setImageURI(uri)
+                    Log.d("RegDeposito", "Foto tomada: $uri")
+                }
+            } else {
+                imagenUri = null
+                Toast.makeText(this, "No se tomó la foto", Toast.LENGTH_SHORT).show()
             }
-            pickImageLauncher.launch(intent)
+        }
+
+        btnTomarFoto.setOnClickListener {
+            imagenUri = crearUriImagen()
+            imagenUri?.let { uri ->
+                cameraLauncher.launch(uri)
+            }
         }
 
         btnRegDeposito.setOnClickListener { registrarDeposito() }
         actualizarDepositoPendiente()
+    }
+
+    private fun crearUriImagen(): Uri? {
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "deposito_${System.currentTimeMillis()}.jpg")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Depositos")
+        }
+        return contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+    }
+
+    private fun obtenerTotalPorCobrar(): Double {
+        val db = dbHelper.readableDatabase
+        val cursor = db.rawQuery(
+            "SELECT SUM(monto_cobrado) FROM guia WHERE entregada = 1", null
+        )
+        val total = if (cursor.moveToFirst()) cursor.getDouble(0) else 0.0
+        cursor.close()
+        return total
+    }
+
+    private fun actualizarDepositoPendiente() {
+        val etMonto = findViewById<EditText>(R.id.etMontoDepositado)
+        val tvPendiente = findViewById<TextView>(R.id.tvDepositoPendiente)
+
+        val totalPorCobrar = obtenerTotalPorCobrar()
+        val montoDepositado = etMonto.text.toString().toDoubleOrNull() ?: 0.0
+        val diferencia = montoDepositado - totalPorCobrar
+
+        val texto = if (diferencia >= 0) {
+            "- %.2f".format(diferencia)
+        } else {
+            "%.2f".format(diferencia * -1)
+        }
+
+        tvPendiente.text = texto
     }
 
     private fun registrarDeposito() {
@@ -164,33 +184,6 @@ class RegDepositoActivity : AppCompatActivity() {
         }
 
         cursor.close()
-    }
-
-    private fun obtenerTotalPorCobrar(): Double {
-        val db = dbHelper.readableDatabase
-        val cursor = db.rawQuery(
-            "SELECT SUM(monto_cobrado) FROM guia WHERE entregada = 1", null
-        )
-        val total = if (cursor.moveToFirst()) cursor.getDouble(0) else 0.0
-        cursor.close()
-        return total
-    }
-
-    private fun actualizarDepositoPendiente() {
-        val etMonto = findViewById<EditText>(R.id.etMontoDepositado)
-        val tvPendiente = findViewById<TextView>(R.id.tvDepositoPendiente)
-
-        val totalPorCobrar = obtenerTotalPorCobrar()
-        val montoDepositado = etMonto.text.toString().toDoubleOrNull() ?: 0.0
-        val diferencia = montoDepositado - totalPorCobrar
-
-        val texto = if (diferencia >= 0) {
-            "- %.2f".format(diferencia)
-        } else {
-            "%.2f".format(diferencia * -1)
-        }
-
-        tvPendiente.text = texto
     }
 
     private fun FechaActual() {

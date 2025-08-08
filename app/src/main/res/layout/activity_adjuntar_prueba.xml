@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:backgroundTint="@color/gray"
-                android:text="Borrar firma"
+                android:text="BORRAR FIRMA"
                 android:textColor="@color/white"
                 app:cornerRadius="8dp" />
 
@@ -73,12 +73,12 @@
                 android:scaleType="centerCrop" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSeleccionarImagen"
+                android:id="@+id/btnTomarFoto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:backgroundTint="@color/gray"
-                android:text="Seleccionar imagen"
+                android:text="TOMAR FOTO"
                 android:textColor="@color/white"
                 app:cornerRadius="8dp" />
 

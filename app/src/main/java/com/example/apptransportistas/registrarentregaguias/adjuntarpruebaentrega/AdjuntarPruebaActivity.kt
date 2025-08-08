@@ -23,14 +23,13 @@ import android.content.ContentValues
 import android.os.Environment
 import android.provider.MediaStore
 
-
 class AdjuntarPruebaActivity : AppCompatActivity() {
 
-    private var imagenSeleccionadaUri: Uri? = null
     private lateinit var dbHelper: DatabaseHelper
     private lateinit var repository: Repository
     private var guiaId: Long = -1L
 
+    private var imagenUri: Uri? = null
     private lateinit var cameraLauncher: ActivityResultLauncher<Uri>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,36 +42,38 @@ class AdjuntarPruebaActivity : AppCompatActivity() {
 
         val signaturePad = findViewById<SignaturePad>(R.id.signaturePad)
         val btnBorrarFirma = findViewById<Button>(R.id.btnBorrarFirma)
-        val btnSeleccionarImagen = findViewById<Button>(R.id.btnSeleccionarImagen)
+        val btnTomarFoto = findViewById<Button>(R.id.btnTomarFoto)
         val btnRegEntrega = findViewById<MaterialButton>(R.id.btnRegEntrega)
-        val imageView = findViewById<ImageView>(R.id.ivFotoComprobante)
+        val fotoComprobante = findViewById<ImageView>(R.id.ivFotoComprobante)
 
         signaturePad.setSaveEnabled(false)
 
         btnBorrarFirma.setOnClickListener { signaturePad.clear() }
 
-        cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-            if (success) {
-                imageView.setImageURI(imagenSeleccionadaUri)
-            } else {
-                // Si falla, eliminar la entrada en MediaStore
-                imagenSeleccionadaUri?.let { contentResolver.delete(it, null, null) }
-                imagenSeleccionadaUri = null
-                Toast.makeText(this, "Foto cancelada o fallida", Toast.LENGTH_SHORT).show()
+        cameraLauncher =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+                if (success) {
+                    fotoComprobante.setImageURI(imagenUri)
+                } else {
+                    // Si falla, elimina la entrada en MediaStore
+                    imagenUri?.let { contentResolver.delete(it, null, null) }
+                    imagenUri = null
+                    Toast.makeText(this, "Foto cancelada o fallida", Toast.LENGTH_SHORT).show()
+                }
             }
-        }
 
-        val btnTomarFoto = findViewById<Button>(R.id.btnSeleccionarImagen)
         btnTomarFoto.setOnClickListener {
             tomarFoto()
         }
 
         btnRegEntrega.setOnClickListener {
             val hayFirma = !signaturePad.isEmpty
-            val hayImagen = imagenSeleccionadaUri != null
+            val hayImagen = imagenUri != null
 
             if (!hayFirma && !hayImagen) {
-                Toast.makeText(this, "Adjunta al menos una prueba (firma o imagen)", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this, "Adjunta al menos una prueba (firma o imagen)", Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
 
@@ -81,18 +82,24 @@ class AdjuntarPruebaActivity : AppCompatActivity() {
 
             lifecycleScope.launch(Dispatchers.IO) {
                 val pruebaGuardada = repository.guardarPruebaEntrega(
-                    guiaId,
-                    firmaBitmap,
-                    imagenSeleccionadaUri?.toString() ?: ""
+                    guiaId, firmaBitmap, imagenUri?.toString() ?: ""
                 )
                 val guiaMarcada = repository.marcarGuiaComoEntregada(guiaId)
 
                 withContext(Dispatchers.Main) {
                     if (pruebaGuardada && guiaMarcada) {
-                        Toast.makeText(this@AdjuntarPruebaActivity, "Entrega registrada correctamente ✅", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@AdjuntarPruebaActivity,
+                            "Entrega registrada correctamente ✅",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         navigateToMenu()
                     } else {
-                        Toast.makeText(this@AdjuntarPruebaActivity, "❌ No se pudo registrar la entrega", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@AdjuntarPruebaActivity,
+                            "❌ No se pudo registrar la entrega",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         btnRegEntrega.isEnabled = true
                     }
                 }
@@ -110,12 +117,11 @@ class AdjuntarPruebaActivity : AppCompatActivity() {
             )
         }
 
-        imagenSeleccionadaUri = contentResolver.insert(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            contentValues
+        imagenUri = contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues
         )
 
-        imagenSeleccionadaUri?.let { uri ->
+        imagenUri?.let { uri ->
             cameraLauncher.launch(uri)
         } ?: Toast.makeText(this, "No se pudo crear la imagen", Toast.LENGTH_SHORT).show()
     }

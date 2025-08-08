@@ -135,13 +135,13 @@
 
             <!-- Botón seleccionar imagen -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSeleccionarImagen"
+                android:id="@+id/btnTomarFoto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="10dp"
                 android:backgroundTint="@color/gray"
-                android:text="Seleccionar imagen"
+                android:text="TOMAR FOTO"
                 android:textColor="@color/white"
                 app:cornerRadius="8dp" />
 
