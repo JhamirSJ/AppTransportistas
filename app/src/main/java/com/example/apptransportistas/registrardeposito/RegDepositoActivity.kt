@@ -81,10 +81,7 @@ class RegDepositoActivity : AppCompatActivity() {
 
         cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
-                imagenUri?.let { uri ->
-                    findViewById<ImageView>(R.id.ivFotoVoucher).setImageURI(uri)
-                    Log.d("RegDeposito", "Foto tomada: $uri")
-                }
+                ivFotoVoucher.setImageURI(imagenUri)
             } else {
                 imagenUri = null
                 Toast.makeText(this, "No se tomó la foto", Toast.LENGTH_SHORT).show()

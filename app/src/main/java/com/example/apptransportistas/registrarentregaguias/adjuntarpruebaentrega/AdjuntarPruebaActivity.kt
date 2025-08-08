@@ -44,7 +44,7 @@ class AdjuntarPruebaActivity : AppCompatActivity() {
         val btnBorrarFirma = findViewById<Button>(R.id.btnBorrarFirma)
         val btnTomarFoto = findViewById<Button>(R.id.btnTomarFoto)
         val btnRegEntrega = findViewById<MaterialButton>(R.id.btnRegEntrega)
-        val fotoComprobante = findViewById<ImageView>(R.id.ivFotoComprobante)
+        val ivFotoComprobante = findViewById<ImageView>(R.id.ivFotoComprobante)
 
         signaturePad.setSaveEnabled(false)
 
@@ -53,7 +53,7 @@ class AdjuntarPruebaActivity : AppCompatActivity() {
         cameraLauncher =
             registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
                 if (success) {
-                    fotoComprobante.setImageURI(imagenUri)
+                    ivFotoComprobante.setImageURI(imagenUri)
                 } else {
                     // Si falla, elimina la entrada en MediaStore
                     imagenUri?.let { contentResolver.delete(it, null, null) }
