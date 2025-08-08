@@ -5,7 +5,6 @@ import android.icu.text.SimpleDateFormat
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -83,6 +82,7 @@ class RegDepositoActivity : AppCompatActivity() {
             if (success) {
                 ivFotoVoucher.setImageURI(imagenUri)
             } else {
+                imagenUri?.let { contentResolver.delete(it, null, null) }
                 imagenUri = null
                 Toast.makeText(this, "No se tomó la foto", Toast.LENGTH_SHORT).show()
             }
