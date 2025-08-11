@@ -21,7 +21,7 @@ import java.util.Locale
 
 class MenuActivity : AppCompatActivity() {
 
-    private val LOCATION_PERMISSION_CODE = 1001
+    private val locationPermissionCode = 1001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,7 +79,7 @@ class MenuActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_CODE
+                locationPermissionCode
             )
         } else {
             startTrackingService()
@@ -93,7 +93,7 @@ class MenuActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == LOCATION_PERMISSION_CODE) {
+        if (requestCode == locationPermissionCode) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startTrackingService()
             } else {

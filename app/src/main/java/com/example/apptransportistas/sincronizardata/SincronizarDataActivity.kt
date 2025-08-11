@@ -1,11 +1,11 @@
 package com.example.apptransportistas.sincronizardata
 
 import android.icu.text.SimpleDateFormat
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.example.apptransportistas.R
 import com.example.apptransportistas.data.local.DatabaseHelper
@@ -28,7 +28,6 @@ import io.grpc.stub.StreamObserver
 import java.util.Locale
 import java.util.concurrent.CountDownLatch
 
-
 class SincronizarDataActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: DatabaseHelper
@@ -49,11 +48,16 @@ class SincronizarDataActivity : AppCompatActivity() {
 
     private fun enviarEntregas() {
         lifecycleScope.launch(Dispatchers.IO) {
+
+            // CONSULTAR LA BASE DE DATOS
             val db = dbHelper.readableDatabase
+
+            // BuscaR guías entregadas
             val cursor = db.rawQuery(
                 "SELECT * FROM guia WHERE entregada = 1", null
             )
 
+            // Si no hay resultados, mostrar Toast
             if (cursor.count == 0) {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
@@ -66,19 +70,20 @@ class SincronizarDataActivity : AppCompatActivity() {
                 return@launch
             }
 
-            // Establecer canal gRPC
-            val channel =
-                ManagedChannelBuilder.forAddress("192.168.10.63", 50051).usePlaintext().build()
+            // PREPARAR CONEXIÓN gRPC
+            val channel = ManagedChannelBuilder
+                .forAddress("192.168.11.186", 50051)
+                .usePlaintext()
+                .build()
 
             val stub = AppTransportistasServiceGrpc.newStub(channel)
 
+            // PREAPARAR RESPUESTA DEL SERVIDOR
             val latch = CountDownLatch(1) // Esperará hasta que el servidor responda
 
             val requestObserver = stub.enviarEntregas(object : StreamObserver<EntregaResponse> {
                 override fun onNext(value: EntregaResponse) {
-                    Log.d(
-                        "gRPC", "Servidor respondió: ${value.mensaje} (${value.totalRegistradas})"
-                    )
+                    Log.d("gRPC", "Servidor respondió: ${value.mensaje} (${value.totalRegistradas})")
                 }
 
                 override fun onError(t: Throwable) {
@@ -91,7 +96,7 @@ class SincronizarDataActivity : AppCompatActivity() {
                 }
             })
 
-            // Recorremos las guías y las enviamos
+            // Recorrer guías y enviar
             while (cursor.moveToNext()) {
                 val guiaId = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
                 val fechaOriginal = cursor.getString(cursor.getColumnIndexOrThrow("fecha")) // dd/MM/yyyy
@@ -115,8 +120,7 @@ class SincronizarDataActivity : AppCompatActivity() {
                     .setMontoCobrado(cursor.getDouble(cursor.getColumnIndexOrThrow("monto_cobrado")))
                     .setEntregada(true)
 
-
-                // Productos
+                // Productos a la guía
                 val prodCursor = db.rawQuery(
                     "SELECT * FROM producto WHERE id_guia = ?", arrayOf(guiaId.toString())
                 )
@@ -130,6 +134,7 @@ class SincronizarDataActivity : AppCompatActivity() {
                 }
                 prodCursor.close()
 
+                // Enviar la guía
                 try {
                     requestObserver.onNext(guia.build())
                 } catch (e: Exception) {
@@ -139,10 +144,7 @@ class SincronizarDataActivity : AppCompatActivity() {
 
             requestObserver.onCompleted()
             cursor.close()
-
-            // Esperamos a que el servidor responda antes de continuar
-            latch.await()
-
+            latch.await() // Esperamos a que el servidor responda antes de continuar
             channel.shutdownNow()
 
             withContext(Dispatchers.Main) {
@@ -168,54 +170,60 @@ class SincronizarDataActivity : AppCompatActivity() {
 
             if (cursor.count == 0) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@SincronizarDataActivity, "No hay pruebas por enviar", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@SincronizarDataActivity,
+                        "No hay pruebas por enviar",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
                 cursor.close()
                 return@launch
             }
 
-            val channel = ManagedChannelBuilder
-                .forAddress("192.168.10.63", 50051)
-                .usePlaintext()
-                .build()
+            val channel =
+                ManagedChannelBuilder.forAddress("192.168.11.186", 50051).usePlaintext().build()
 
             val stub = AppTransportistasServiceGrpc.newStub(channel)
 
             val latch = CountDownLatch(1)
 
-            val requestObserver = stub.enviarPruebasEntrega(object : StreamObserver<PruebaEntregaResponse> {
-                override fun onNext(value: PruebaEntregaResponse) {
-                    Log.d("gRPC", "Servidor respondió: ${value.mensaje} (${value.totalRegistradas})")
-                }
+            val requestObserver =
+                stub.enviarPruebasEntrega(object : StreamObserver<PruebaEntregaResponse> {
+                    override fun onNext(value: PruebaEntregaResponse) {
+                        Log.d(
+                            "gRPC",
+                            "Servidor respondió: ${value.mensaje} (${value.totalRegistradas})"
+                        )
+                    }
 
-                override fun onError(t: Throwable) {
-                    Log.e("gRPC", "❌ Error al enviar pruebas", t)
-                    latch.countDown()
-                }
+                    override fun onError(t: Throwable) {
+                        Log.e("gRPC", "Error al enviar pruebas", t)
+                        latch.countDown()
+                    }
 
-                override fun onCompleted() {
-                    latch.countDown()
-                }
-            })
+                    override fun onCompleted() {
+                        latch.countDown()
+                    }
+                })
 
             while (cursor.moveToNext()) {
                 val numeroGuia = cursor.getString(cursor.getColumnIndexOrThrow("numero"))
                 val fechaRegistro = cursor.getString(cursor.getColumnIndexOrThrow("fecha_registro"))
-                val firmaBytes = cursor.getBlob(cursor.getColumnIndexOrThrow("firma")) ?: ByteArray(0)
+                val firmaBytes =
+                    cursor.getBlob(cursor.getColumnIndexOrThrow("firma")) ?: ByteArray(0)
 
                 val pruebaId = cursor.getLong(cursor.getColumnIndexOrThrow("id"))
 
                 val imagenPath = cursor.getString(cursor.getColumnIndexOrThrow("imagen_path")) ?: ""
                 val imagenBytes = try {
-                    val uri = Uri.parse(imagenPath)
+                    val uri = imagenPath.toUri()
                     contentResolver.openInputStream(uri)?.readBytes() ?: ByteArray(0)
                 } catch (e: Exception) {
-                    Log.e("gRPC", "⚠️ Error leyendo imagen desde URI: $imagenPath", e)
+                    Log.e("gRPC", "Error leyendo imagen desde URI: $imagenPath", e)
                     ByteArray(0)
                 }
 
-                val prueba = PruebaEntrega.newBuilder()
-                    .setNumeroGuia(numeroGuia)
+                val prueba = PruebaEntrega.newBuilder().setNumeroGuia(numeroGuia)
                     .setFechaRegistro(fechaRegistro)
 
                 if (firmaBytes.isNotEmpty()) prueba.setFirma(ByteString.copyFrom(firmaBytes))
@@ -225,7 +233,7 @@ class SincronizarDataActivity : AppCompatActivity() {
                     requestObserver.onNext(prueba.build())
                     pruebasSincronizadas.add(pruebaId)
                 } catch (e: Exception) {
-                    Log.e("gRPC", "❌ Error enviando prueba", e)
+                    Log.e("gRPC", "Error enviando prueba", e)
                 }
             }
 
@@ -237,11 +245,17 @@ class SincronizarDataActivity : AppCompatActivity() {
 
             val dbWritable = dbHelper.writableDatabase
             for (id in pruebasSincronizadas) {
-                dbWritable.execSQL("UPDATE prueba_entrega SET sincronizado = 1 WHERE id = ?", arrayOf(id))
+                dbWritable.execSQL(
+                    "UPDATE prueba_entrega SET sincronizado = 1 WHERE id = ?", arrayOf(id)
+                )
             }
 
             withContext(Dispatchers.Main) {
-                Toast.makeText(this@SincronizarDataActivity, "📤 Pruebas enviadas correctamente", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@SincronizarDataActivity,
+                    "Pruebas enviadas correctamente",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -251,10 +265,8 @@ class SincronizarDataActivity : AppCompatActivity() {
             val db = dbHelper.writableDatabase
 
             val channel = ManagedChannelBuilder.forAddress(
-                    "192.168.10.63",
-                    50051
-                )
-                .usePlaintext().build()
+                "192.168.11.186", 50051
+            ).usePlaintext().build()
 
             val stub = AppTransportistasServiceGrpc.newBlockingStub(channel)
 
@@ -265,14 +277,14 @@ class SincronizarDataActivity : AppCompatActivity() {
                 var cantidad = 0
 
                 for (guia in responseStream) {
-                    Log.d("gRPC", "📥 Recibida guía del backend: ${guia.numero}")
+                    Log.d("gRPC", "Recibida guía del backend: ${guia.numero}")
 
                     val cursor = db.rawQuery(
                         "SELECT id FROM guia WHERE numero = ?", arrayOf(guia.numero)
                     )
 
                     if (!cursor.moveToFirst()) {
-                        Log.d("gRPC", "📦 Insertando guía ${guia.numero} en SQLite")
+                        Log.d("gRPC", "Insertando guía ${guia.numero} en SQLite")
 
                         // Insertar guía
                         db.execSQL(
@@ -359,7 +371,7 @@ class SincronizarDataActivity : AppCompatActivity() {
             }
 
             val channel =
-                ManagedChannelBuilder.forAddress("192.168.10.63", 50051).usePlaintext().build()
+                ManagedChannelBuilder.forAddress("192.168.11.186", 50051).usePlaintext().build()
 
             val stub = AppTransportistasServiceGrpc.newStub(channel)
             val latch = CountDownLatch(1)
@@ -402,7 +414,7 @@ class SincronizarDataActivity : AppCompatActivity() {
 
                 // Leer imagen
                 val imageBytes = try {
-                    val uri = Uri.parse(imagenPath)
+                    val uri = imagenPath.toUri()
                     val inputStream = contentResolver.openInputStream(uri)
                     inputStream?.readBytes() ?: ByteArray(0)
                 } catch (e: Exception) {
@@ -442,7 +454,10 @@ class SincronizarDataActivity : AppCompatActivity() {
     private fun formatearFecha(fechaOriginal: String): String {
         return try {
             val formatoEntrada = when {
-                fechaOriginal.contains(" ") -> SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                fechaOriginal.contains(" ") -> SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm:ss", Locale.getDefault()
+                )
+
                 else -> SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             }
 

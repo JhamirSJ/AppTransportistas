@@ -35,7 +35,7 @@ class RegDepositoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_reg_deposito)
 
         dbHelper = DatabaseHelper(this)
-        FechaActual()
+        fechaActual()
 
         val etFechaOperacion = findViewById<EditText>(R.id.etFechaOperacion)
         val btnTomarFoto = findViewById<Button>(R.id.btnTomarFoto)
@@ -183,7 +183,7 @@ class RegDepositoActivity : AppCompatActivity() {
         cursor.close()
     }
 
-    private fun FechaActual() {
+    private fun fechaActual() {
         val tvFecha = findViewById<TextView>(R.id.tvFechaActual)
         val fechaActual = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
         tvFecha.text = "Hoy: $fechaActual"

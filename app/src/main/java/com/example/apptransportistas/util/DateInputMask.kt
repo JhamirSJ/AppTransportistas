@@ -16,7 +16,7 @@ class DateInputMask(private val input: EditText) {
             override fun afterTextChanged(s: Editable?) {
                 if (isUpdating || s == null) return
 
-                val clean = s.toString().replace(Regex("[^\\d]"), "")
+                val clean = s.toString().replace(Regex("\\D"), "")
                 val formatted = StringBuilder()
                 isUpdating = true
 

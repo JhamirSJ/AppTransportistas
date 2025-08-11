@@ -48,7 +48,7 @@ class RegGuiasActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reg_guias)
-        FechaActual()
+        fechaActual()
 
         val btnSelecGuia = findViewById<MaterialButton>(R.id.btnSelecGuia)
         val btnVerProductos = findViewById<MaterialButton>(R.id.btnVerProductos)
@@ -61,7 +61,7 @@ class RegGuiasActivity : AppCompatActivity() {
         dbHelper = DatabaseHelper(this)
     }
 
-    private fun FechaActual() {
+    private fun fechaActual() {
         val tvFecha = findViewById<TextView>(R.id.tvFechaActual)
         val fechaActual = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
         tvFecha.text = "Hoy: $fechaActual"

@@ -1,11 +1,9 @@
 package com.example.apptransportistas.guias.misguias
 
-import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.widget.EditText
 import android.text.TextWatcher
 import android.text.Editable
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,8 +12,6 @@ import com.example.apptransportistas.R
 import com.example.apptransportistas.data.local.DatabaseHelper
 import com.example.apptransportistas.guias.Guia
 import com.example.apptransportistas.guias.GuiaAdapter
-import java.util.Date
-import java.util.Locale
 
 class MisGuiasActivity : AppCompatActivity() {
 
