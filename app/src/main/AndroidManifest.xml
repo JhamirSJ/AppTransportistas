@@ -45,15 +45,11 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider> <!-- Activities -->
-        <activity
-            android:name=".liquidacion.GenerarLiquidacionActivity"
-            android:exported="false" />
+        </provider>
+
+        <!-- Activities -->
         <activity
             android:name=".registrarentregaguias.adjuntarpruebaentrega.AdjuntarPruebaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".registrardeposito.RegDepositoActivity"
             android:exported="false" />
         <activity
             android:name=".sincronizardata.SincronizarDataActivity"

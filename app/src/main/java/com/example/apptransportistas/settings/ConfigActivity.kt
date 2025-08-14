@@ -29,7 +29,7 @@ class ConfigActivity : AppCompatActivity() {
                 val match = regex.find(xml)
                 val idUser = match?.groups?.get(1)?.value ?: ""
                 etUserId.setText(idUser)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 Toast.makeText(this, "Error leyendo configuración", Toast.LENGTH_SHORT).show()
             }
         }
@@ -47,7 +47,7 @@ class ConfigActivity : AppCompatActivity() {
                 xml = xml.replace(Regex("iduser=\"\\d+\""), "iduser=\"$nuevoIdUser\"")
                 file.writeText(xml)
                 Toast.makeText(this, "Configuración guardada ✅", Toast.LENGTH_SHORT).show()
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 Toast.makeText(this, "Error guardando configuración", Toast.LENGTH_SHORT).show()
             }
         }
