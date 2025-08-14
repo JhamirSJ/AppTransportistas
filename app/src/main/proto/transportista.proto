@@ -7,34 +7,20 @@ option java_package = "apptransportistaspb";
 option java_multiple_files = true;
 
 service AppTransportistasService {
-  rpc EnviarEntregas (stream Guia) returns (EntregaResponse);
   rpc ObtenerDespachos (DespachoRequest) returns (stream Guia);
-  rpc EnviarDepositos (stream Deposito) returns (DepositoResponse);
+  rpc EnviarEntregas (stream Guia) returns (EntregaResponse);
   rpc EnviarPruebasEntrega (stream PruebaEntrega) returns (PruebaEntregaResponse);
+  rpc LoginAdmin (LoginRequest) returns (LoginResponse);
+  rpc EnviarTracking (stream Ubicacion) returns (TrackingResponse);
 }
 
 message DespachoRequest {
   int32 transportista_id = 1;
 }
 
-message EntregaResponse {
-  string mensaje = 1;
-  int32 total_registradas = 2;
-}
-
-message DepositoResponse {
-  string mensaje = 1;
-  int32 total_registrados = 2;
-}
-
-message PruebaEntregaResponse {
-  string mensaje = 1;
-  int32 total_registradas = 2;
-}
-
 message Guia {
   string numero = 1;
-  string fecha = 2;         // formato: "2025-07-01"
+  string fecha = 2;
   string codigo_cliente = 3;
   string nombre_cliente = 4;
   string nro_comprobante = 5;
@@ -49,19 +35,41 @@ message Producto {
   int32 cantidad = 2;
 }
 
-message Deposito {
-  string nro_operacion = 1;
-  string fecha = 2;         // formato: "2025-07-10"
-  int32 id_banco = 3;
-  double monto = 4;
-  bytes comprobante = 5;    // imagen del voucher como array de bytes (ideal para gRPC)
+message EntregaResponse {
+  string mensaje = 1;
+  int32 total_registradas = 2;
 }
 
 message PruebaEntrega {
   string numero_guia = 1;
-  string fecha_registro = 2; // formato: "2025-07-11"
-  bytes firma = 3;           // Firma como imagen (PNG comprimido)
-  bytes imagen = 4;          // Imagen como comprobante (JPG o PNG comprimido)
+  string fecha_registro = 2;
+  bytes firma = 3;
+  bytes imagen = 4;
 }
 
+message PruebaEntregaResponse {
+  string mensaje = 1;
+  int32 total_registradas = 2;
+}
 
+message LoginRequest {
+  string usuario = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  bool success = 1;
+  string mensaje = 2;
+}
+
+message Ubicacion {
+    string device_id = 1;
+    double latitud = 2;
+    double longitud = 3;
+    string fecha_hora = 4;
+}
+
+message TrackingResponse {
+    string mensaje = 1;
+    int32 totalRegistrados = 2;
+}

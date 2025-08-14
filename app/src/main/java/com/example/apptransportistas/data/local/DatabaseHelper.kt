@@ -12,9 +12,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
 
         const val TABLE_GUIA = "guia"
         const val TABLE_PRODUCTO = "producto"
-        const val TABLE_BANCO = "banco"
-        const val TABLE_DEPOSITO = "deposito"
         const val TABLE_PRUEBA = "prueba_entrega"
+        const val TABLE_UBICACION = "tracking"
     }
     override fun onCreate(db: SQLiteDatabase) {
 
@@ -44,34 +43,12 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             );
         """.trimIndent()
 
-        // Tabla banco
-        val createBanco = """
-            CREATE TABLE $TABLE_BANCO (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nombre TEXT UNIQUE NOT NULL
-            );
-        """.trimIndent()
-
-        // Tabla depósito
-        val createDeposito = """
-            CREATE TABLE $TABLE_DEPOSITO (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nro_operacion TEXT NOT NULL,
-                fecha TEXT NOT NULL,
-                monto REAL NOT NULL,
-                id_banco INTEGER NOT NULL,
-                comprobante_path TEXT,
-                sincronizado INTEGER DEFAULT 0,
-                FOREIGN KEY(id_banco) REFERENCES $TABLE_BANCO(id)
-            );
-        """.trimIndent()
-
         // Tabla prueba
         val createPrueba = """
             CREATE TABLE $TABLE_PRUEBA (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 guia_id INTEGER NOT NULL,
-                firma BLOB,
+                firma_path TEXT,
                 imagen_path TEXT,
                 fecha_registro TEXT,
                 sincronizado INTEGER DEFAULT 0,
@@ -79,17 +56,23 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
             );
         """.trimIndent()
 
+        // Tabla ubicación transportista
+        val createTracking = """
+            CREATE TABLE $TABLE_UBICACION (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                device_id TEXT NOT NULL,
+                latitud REAL NOT NULL,
+                longitud REAL NOT NULL,
+                fecha_hora TEXT NOT NULL,
+                sincronizado INTEGER DEFAULT 0
+            );
+        """.trimIndent()
+
         db.execSQL(createGuia)
         db.execSQL(createProducto)
-        db.execSQL(createBanco)
-        db.execSQL(createDeposito)
         db.execSQL(createPrueba)
+        db.execSQL(createTracking)
 
-        // Insertar bancos iniciales
-        val bancosIniciales = listOf("BCP", "BBVA", "Interbank", "Scotiabank", "Banco de la Nación")
-        bancosIniciales.forEach { nombre ->
-            db.execSQL("INSERT INTO $TABLE_BANCO (nombre) VALUES ('$nombre')")
-        }
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

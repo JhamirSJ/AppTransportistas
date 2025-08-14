@@ -3,9 +3,4 @@
     <external-path
         name="dcim"
         path="DCIM/PruebasEntregas/" />
-
-    <!-- Nueva ruta para PDFs en "files" -->
-    <external-files-path
-        name="external_files"
-        path="." />
 </paths>

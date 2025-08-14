@@ -35,7 +35,7 @@ class RegGuiasActivity : AppCompatActivity() {
                 guia?.let {
                     guiaSeleccionada = it
                     findViewById<TextView>(R.id.tvNroGuiaSelec).text = it.numero
-                    findViewById<TextView>(R.id.tvFechaGuiaSelec).text = it.fecha
+                    findViewById<TextView>(R.id.tvFechaGuiaSelec).text = formatearFecha(it.fecha)
                     findViewById<TextView>(R.id.tvCodGuiaSelec).text = it.codigo
                     findViewById<TextView>(R.id.tvNombreGuiaSelec).text = it.nombre
                     findViewById<TextView>(R.id.tvNroComprobante).text = it.nroComprobante
@@ -85,4 +85,16 @@ class RegGuiasActivity : AppCompatActivity() {
         intent.putExtra("guiaId", guiaId)
         startActivity(intent)
     }
+
+    private fun formatearFecha(fechaIso: String): String {
+        return try {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            val date = inputFormat.parse(fechaIso)
+            outputFormat.format(date)
+        } catch (_: Exception) {
+            fechaIso
+        }
+    }
+
 }

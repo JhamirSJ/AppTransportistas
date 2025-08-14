@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/tvTituloLogin"
+        style="@style/TituloPantalla"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:text="EDITAR CONFIGURACIÓN" />
+
+    <EditText
+        android:id="@+id/etUser"
+        style="@style/EstiloRecuadro"
+        android:hint="Usuario"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        style="@style/EstiloRecuadro"
+        android:layout_marginTop="12dp"
+        android:hint="Contraseña"
+        android:inputType="textPassword" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <Button
+            android:id="@+id/btnCancelar"
+            style="@style/BotonSecundarioGris"
+            android:layout_marginRight="5dp"
+            android:layout_weight="5"
+            android:text="CANCELAR" />
+
+        <Button
+            android:id="@+id/btnIngresar"
+            style="@style/BotonPrincipalRojo"
+            android:layout_weight="5"
+            android:text="INGRESAR" />
+
+    </LinearLayout>
+</LinearLayout>

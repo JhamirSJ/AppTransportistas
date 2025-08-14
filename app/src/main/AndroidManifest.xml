@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <!-- Permisos requeridos -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28"/>
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
 
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW" />
+
             <data android:mimeType="application/pdf" />
         </intent>
     </queries>
@@ -28,14 +29,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppTransportistas"
         tools:targetApi="31">
-
+        <activity
+            android:name=".settings.ConfigActivity"
+            android:exported="false" />
         <!-- Servicio de ubicación en primer plano -->
         <service
             android:name=".ubicacion.TrackingService"
-            android:foregroundServiceType="location"
-            android:exported="false" />
-
-        <!-- FileProvider para compartir archivos como el PDF -->
+            android:exported="false"
+            android:foregroundServiceType="location" /> <!-- FileProvider para compartir archivos como el PDF -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -44,28 +45,40 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
-
-        <!-- Activities -->
-        <activity android:name=".liquidacion.GenerarLiquidacionActivity" android:exported="false" />
-        <activity android:name=".registrarentregaguias.adjuntarpruebaentrega.AdjuntarPruebaActivity" android:exported="false" />
-        <activity android:name=".registrardeposito.RegDepositoActivity" android:exported="false" />
-        <activity android:name=".sincronizardata.SincronizarDataActivity" android:exported="false" />
-        <activity android:name=".verproductos.VerProductosActivity" android:exported="false" />
-        <activity android:name=".guias.seleccionarguia.SelecGuiaActivity" android:exported="false" />
-        <activity android:name=".guias.misguias.MisGuiasActivity" android:exported="false" />
-        <activity android:name=".registrarentregaguias.RegGuiasActivity" android:exported="false" />
-
-        <!-- Activity principal (launcher) -->
+        </provider> <!-- Activities -->
+        <activity
+            android:name=".liquidacion.GenerarLiquidacionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".registrarentregaguias.adjuntarpruebaentrega.AdjuntarPruebaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".registrardeposito.RegDepositoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".sincronizardata.SincronizarDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".verproductos.VerProductosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".guias.seleccionarguia.SelecGuiaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".guias.misguias.MisGuiasActivity"
+            android:exported="false" />
+        <activity
+            android:name=".registrarentregaguias.RegGuiasActivity"
+            android:exported="false" /> <!-- Activity principal (launcher) -->
         <activity
             android:name=".menu.MenuActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

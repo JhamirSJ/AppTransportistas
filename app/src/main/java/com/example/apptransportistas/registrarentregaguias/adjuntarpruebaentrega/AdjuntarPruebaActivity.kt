@@ -20,6 +20,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import android.content.ContentValues
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Environment
 import android.provider.MediaStore
 
@@ -78,11 +81,26 @@ class AdjuntarPruebaActivity : AppCompatActivity() {
             }
 
             btnRegEntrega.isEnabled = false
-            val firmaBitmap = if (hayFirma) signaturePad.signatureBitmap else null
+
+            // Guardar firma como imagen si existe
+            val firmaPath = if (hayFirma) {
+                val original = signaturePad.signatureBitmap
+                val fondoBlanco = Bitmap.createBitmap(original.width, original.height, Bitmap.Config.ARGB_8888)
+                val canvas = Canvas(fondoBlanco)
+                canvas.drawColor(Color.WHITE)
+                canvas.drawBitmap(original, 0f, 0f, null)
+                guardarFirmaEnDispositivo(fondoBlanco)
+            } else {
+                ""
+            }
+
+            val fotoPath = imagenUri?.toString() ?: ""
 
             lifecycleScope.launch(Dispatchers.IO) {
-                val pruebaGuardada = repository.guardarPruebaEntrega(
-                    guiaId, firmaBitmap, imagenUri?.toString() ?: ""
+                val pruebaGuardada = repository.guardarPruebaDeEntrega(
+                    guiaId,
+                    firmaPath ?: "",
+                    fotoPath
                 )
                 val guiaMarcada = repository.marcarGuiaComoEntregada(guiaId)
 
@@ -104,6 +122,23 @@ class AdjuntarPruebaActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+
+    private fun guardarFirmaEnDispositivo(bitmap: Bitmap): String? {
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "firma_${System.currentTimeMillis()}.png")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/png") // PNG conserva transparencia
+            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/AppTransportistas")
+        }
+
+        val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+        return uri?.let {
+            contentResolver.openOutputStream(it)?.use { outputStream ->
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            }
+            it.toString() // Devolvemos la ruta (URI) como String
         }
     }
 
